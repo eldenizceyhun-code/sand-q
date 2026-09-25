@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="az" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sandıq — Geyimlərini satmağın ən asan yolu</title>
+  
+  <!-- Google Fonts (Playfair Display & Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            sand: { 
+              bg: '#F4F3EF', 
+              card: '#EFECE6', 
+              border: '#E2DDD5',
+              dark: '#E2DEC2'
+            },
+            olive: { 
+              DEFAULT: '#2C3E2E', 
+              hover: '#213023', 
+              light: '#EAF0EB',
+              soft: '#3A523D'
+            },
+            bronze: { 
+              DEFAULT: '#B87333', 
+              hover: '#A05A2C', 
+              light: '#FDF6F0' 
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="bg-sand-bg text-stone-800 font-sans min-h-screen selection:bg-bronze selection:text-white flex flex-col justify-between">
+
+  <div>
+    <!-- HEADER / NAVIGASİYA -->
+    <header class="glass-nav border-b border-sand-border sticky top-0 z-40 px-4 py-3.5 transition-all">
+      <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
+        
+        <!-- Logo -->
+        <a href="#" onclick="resetFilters()" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-olive flex items-center justify-center text-white text-xl shadow-md group-hover:scale-105 transition-transform">
+            📦
+          </div>
+          <div>
+            <span class="font-serif text-2xl font-bold text-olive tracking-tight leading-none block">Sandıq</span>
+            <span class="text-[9px] text-bronze font-semibold tracking-widest uppercase block mt-0.5">Marketplace</span>
+          </div>
+        </a>
+
+        <!-- Axtarış Xanası -->
+        <div class="flex-1 max-w-md mx-2 hidden sm:block">
+          <div class="relative">
+            <input type="text" id="search-input" oninput="applyFilters()" placeholder="Geyim, brend və ya mağaza axtar..." 
+                   class="w-full bg-sand-card/70 border border-sand-border text-xs rounded-xl pl-9 pr-4 py-2.5 focus:outline-none focus:bg-white focus:border-olive transition-all">
+            <span class="absolute left-3 top-3 text-stone-400 text-xs">🔍</span>
+          </div>
+        </div>
+
+        <!-- Düymələr -->
+        <div class="flex items-center gap-2">
+          <a href="#about-section" class="text-xs font-semibold text-stone-600 hover:text-olive px-3 py-2 rounded-xl transition hidden md:block">
+            Haqqımızda
+          </a>
+          <button onclick="openStoreModal()" class="bg-sand-card hover:bg-sand-border text-stone-800 text-xs px-3.5 py-2.5 rounded-xl font-medium border border-sand-border transition flex items-center gap-1.5">
+            <span>🏪</span> <span id="nav-store-btn-text">Mağaza Yarat</span>
+          </button>
+          <button onclick="openAddModal()" class="bg-olive hover:bg-olive-hover text-white text-xs px-4 py-2.5 rounded-xl font-medium shadow-md hover:shadow-lg transition flex items-center gap-1.5">
+            <span>+</span> <span>Elan Sat</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobil Axtarış Barı -->
+      <div class="mt-2.5 sm:hidden">
+        <div class="relative">
+          <input type="text" id="search-input-mobile" oninput="syncMobileSearch()" placeholder="Geyim, brend və ya mağaza axtar..." 
+                 class="w-full bg-sand-card border border-sand-border text-xs rounded-xl pl-9 pr-4 py-2 focus:outline-none focus:bg-white focus:border-olive">
+          <span class="absolute left-3 top-2.5 text-stone-400 text-xs">🔍</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO / TƏQDİMAT BÖLMƏSİ (Dəqiq Mətn) -->
+    <section class="relative bg-gradient-to-br from-olive via-olive-soft to-stone-900 text-white overflow-hidden py-12 md:py-16 px-4">
+      <!-- Arxa Fon Bəzək Elementləri -->
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-bronze/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-olive-light/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-4xl mx-auto text-center relative z-10 space-y-5">
+        <span class="inline-block bg-bronze/30 text-bronze-light text-[11px] font-bold uppercase tracking-widest px-3.5 py-1.2 rounded-full border border-bronze/40">
+          İkinci Əl Geyim Marketplace-i
+        </span>
+
+        <!-- Tələb olunan 1-ci Giriş Mətni -->
+        <h1 class="font-serif text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-amber-50 leading-tight">
+          Geyimlərini satmağın ən asan yolu.
+        </h1>
+
+        <!-- Tələb olunan 2-ci Giriş Mətni -->
+        <p class="text-lg sm:text-2xl font-serif text-bronze-light font-medium italic">
+          Şəklini çək. Qiymətini yaz. Mağazan hazırdır.
+        </p>
+
+        <!-- Tələb olunan 3-cü Giriş Mətni -->
+        <p class="text-xs sm:text-sm text-stone-200 max-w-xl mx-auto leading-relaxed font-light">
+          İstifadə etmədiyin geyimləri öz mağazanda yerləşdir, alıcılarla paylaş və sat.
+        </p>
+
+        <div class="pt-4 flex flex-wrap justify-center gap-3">
+          <button onclick="openStoreModal()" class="bg-bronze hover:bg-bronze-hover text-white px-6 py-3 rounded-xl font-bold text-xs shadow-lg transition hover:scale-105">
+            🏪 Mağazanı Yaradın
+          </button>
+          <a href="#catalog-section" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-xl font-bold text-xs backdrop-blur-sm transition">
+            🛍️ Kataloqa Baxın
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- KATALOQ VƏ FİLTRLƏR -->
+    <main id="catalog-section" class="max-w-6xl mx-auto px-4 py-8">
+
+      <!-- Cinsiyyət və Kateqoriya Naviqasiyası -->
+      <div class="space-y-4 mb-6">
+        
+        <!-- Cinsiyyət Tabları -->
+        <div class="flex gap-2 border-b border-sand-border pb-3 text-xs overflow-x-auto no-scrollbar">
+          <button onclick="setGender('all', this)" class="gender-btn active bg-olive text-white px-5 py-2 rounded-xl font-medium shadow-sm whitespace-nowrap">Bütün Elanlar</button>
+          <button onclick="setGender('women', this)" class="gender-btn bg-white text-stone-600 border border-sand-border px-5 py-2 rounded-xl font-medium hover:bg-sand-card whitespace-nowrap">Qadın</button>
+          <button onclick="setGender('men', this)" class="gender-btn bg-white text-stone-600 border border-sand-border px-5 py-2 rounded-xl font-medium hover:bg-sand-card whitespace-nowrap">Kişi</button>
+          <button onclick="setGender('kids', this)" class="gender-btn bg-white text-stone-600 border border-sand-border px-5 py-2 rounded-xl font-medium hover:bg-sand-card whitespace-nowrap">Uşaq</button>
+          <button onclick="setGender('unisex', this)" class="gender-btn bg-white text-stone-600 border border-sand-border px-5 py-2 rounded-xl font-medium hover:bg-sand-card whitespace-nowrap">Unisex</button>
+        </div>
+
+        <!-- Detallı Filtrlər -->
+        <div class="flex flex-wrap items-center justify-between gap-3 text-xs bg-white p-3.5 rounded-2xl border border-sand-border shadow-sm">
+          <div class="flex flex-wrap gap-2 items-center">
+            <!-- Kateqoriya -->
+            <select id="filter-category" onchange="applyFilters()" class="bg-sand-bg border border-sand-border rounded-xl px-3 py-2 text-stone-700 focus:outline-none focus:border-olive">
+              <option value="all">Bütün Kateqoriyalar</option>
+              <option value="clothing">Geyim</option>
+              <option value="shoes">Ayaqqabı</option>
+              <option value="bags">Çanta</option>
+              <option value="accessories">Aksesuar</option>
+            </select>
+
+            <!-- Vəziyyət -->
+            <select id="filter-condition" onchange="applyFilters()" class="bg-sand-bg border border-sand-border rounded-xl px-3 py-2 text-stone-700 focus:outline-none focus:border-olive">
+              <option value="all">Bütün Vəziyyətlər</option>
+              <option value="new_with_tags">Təzə (Etiketli)</option>
+              <option value="like_new">Az geyinilmiş (Əla)</option>
+              <option value="good">Yaxşı</option>
+            </select>
+
+            <!-- Şəhər -->
+            <select id="filter-city" onchange="applyFilters()" class="bg-sand-bg border border-sand-border rounded-xl px-3 py-2 text-stone-700 focus:outline-none focus:border-olive">
+              <option value="all">Bütün Şəhərlər</option>
+              <option value="Bakı">Bakı</option>
+              <option value="Sumqayıt">Sumqayıt</option>
+              <option value="Gəncə">Gəncə</option>
+              <option value="Digər">Digər</option>
+            </select>
+          </div>
+
+          <!-- Sıralama -->
+          <div class="flex items-center gap-2 ml-auto">
+            <span class="text-stone-400 font-medium">Sırala:</span>
+            <select id="filter-sort" onchange="applyFilters()" class="bg-sand-bg border border-sand-border rounded-xl px-3 py-2 text-stone-800 font-semibold focus:outline-none focus:border-olive">
+              <option value="newest">Ən yenilər</option>
+              <option value="price_asc">Qiymət: Ucuzdan bahaya</option>
+              <option value="price_desc">Qiymət: Bahadan ucuza</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- MƏHSUL TORU (GRID) -->
+      <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <!-- JavaScript ilə dolur -->
+      </div>
+
+      <!-- BOŞ NƏTİCƏ -->
+      <div id="empty-state" class="hidden text-center py-16 bg-white rounded-3xl border border-sand-border mt-4">
+        <p class="text-4xl mb-3">🧺</p>
+        <h3 class="text-stone-900 font-bold text-base font-serif">Axtarışa uyğun geyim tapılmadı</h3>
+        <p class="text-xs text-stone-500 mt-1">Filtrləri dəyişərək yenidən cəhd edin və ya ilk elanı siz verin.</p>
+      </div>
+    </main>
+
+    <!-- HAQQIMIZDA BÖLMƏSİ (Dəqiq Mətnlər Doldurulmuşdur) -->
+    <section id="about-section" class="bg-white border-t border-sand-border py-16 px-4 mt-12">
+      <div class="max-w-4xl mx-auto space-y-8">
+        
+        <div class="text-center space-y-2">
+          <span class="text-bronze text-xs font-bold uppercase tracking-widest block">Biz kimik?</span>
+          <!-- Tələb olunan Haqqımızda Başlığı -->
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold text-stone-900">Haqqımızda</h2>
+          <div class="w-12 h-0.5 bg-bronze mx-auto mt-2"></div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 items-center pt-4">
+          
+          <div class="space-y-4 text-stone-700 text-sm leading-relaxed">
+            <!-- Tələb olunan 1-ci Paraqraf -->
+            <p class="font-semibold text-stone-900 text-base">
+              Burada hər kəs öz mağazasını yarada bilər.
+            </p>
+
+            <!-- Tələb olunan 2-ci Paraqraf -->
+            <p class="text-stone-600">
+              İstifadə etmədiyin geyimləri yerləşdir, öz qiymətini müəyyən et və onları sat. Alıcılar isə müxtəlif insanların mağazalarına baxaraq istədikləri məhsulları tapa bilərlər.
+            </p>
+
+            <!-- Tələb olunan 3-cü Paraqraf -->
+            <p class="text-stone-600 border-l-2 border-olive pl-3 italic">
+              Biz ikinci əl alış-verişi daha sadə etmək üçün bu platformanı yaratdıq.
+            </p>
+          </div>
+
+          <!-- Tələb olunan Yekun Ç çağırış Zolağı -->
+          <div class="bg-sand-card p-6 sm:p-8 rounded-3xl border border-sand-border text-center space-y-4 shadow-sm">
+            <span class="text-3xl block">📦</span>
+            <h3 class="font-serif text-xl sm:text-2xl font-bold text-olive">
+              Sən mağazanı yarat. Qalanını birlikdə həll edək.
+            </h3>
+            <button onclick="openStoreModal()" class="w-full bg-olive hover:bg-olive-hover text-white py-3 rounded-xl font-bold text-xs shadow-md transition">
+              İndi Mağazanı Yaradın
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-stone-900 text-stone-400 text-xs py-8 px-4 border-t border-stone-800">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">📦</span>
+        <span class="font-serif text-lg font-bold text-white">Sandıq</span>
+        <span class="text-[10px] text-stone-500">© 2026 Bütün hüquqlar qorunur</span>
+      </div>
+      <div class="flex gap-4 text-stone-400">
+        <a href="#about-section" class="hover:text-white transition">Haqqımızda</a>
+        <a href="#catalog-section" class="hover:text-white transition">Kataloq</a>
+        <button onclick="openAddModal()" class="hover:text-white transition">Elan Yerləşdir</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MODALLAR ==================== -->
+
+  <!-- 1. MƏHSUL DETAL MODALI -->
+  <div id="detail-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
+      <button onclick="closeModal('detail-modal')" class="absolute top-4 right-4 bg-sand-card hover:bg-sand-border text-stone-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm z-10 transition">✕</button>
+      
+      <!-- Şəkil -->
+      <div class="h-80 w-full rounded-2xl overflow-hidden bg-sand-card mb-4 relative">
+        <img id="modal-img" src="" class="w-full h-full object-cover">
+        <span id="modal-gender-badge" class="absolute bottom-3 left-3 bg-black/70 text-white text-[10px] font-bold px-2.5 py-1 rounded-md backdrop-blur-sm"></span>
+      </div>
+
+      <!-- Əsas Məlumatlar -->
+      <div class="flex justify-between items-start mb-3">
+        <div>
+          <span id="modal-brand" class="text-[10px] font-bold text-bronze uppercase tracking-widest block"></span>
+          <h2 id="modal-title" class="text-xl font-bold text-stone-900 leading-snug font-serif"></h2>
+          <p id="modal-store-name" class="text-xs text-olive font-semibold mt-0.5"></p>
+        </div>
+        <div class="text-right">
+          <span id="modal-price" class="text-2xl font-bold text-olive block"></span>
+          <span id="modal-city" class="text-[11px] text-stone-400"></span>
+        </div>
+      </div>
+
+      <!-- Xüsusiyyət Tag-ları -->
+      <div class="grid grid-cols-3 gap-2 my-4 text-xs">
+        <div class="bg-sand-bg p-2.5 rounded-xl text-center border border-sand-border">
+          <span class="text-stone-400 text-[10px] block">Ölçü</span>
+          <strong id="modal-size" class="text-stone-800"></strong>
+        </div>
+        <div class="bg-sand-bg p-2.5 rounded-xl text-center border border-sand-border">
+          <span class="text-stone-400 text-[10px] block">Vəziyyət</span>
+          <strong id="modal-condition" class="text-stone-800"></strong>
+        </div>
+        <div class="bg-sand-bg p-2.5 rounded-xl text-center border border-sand-border">
+          <span class="text-stone-400 text-[10px] block">Kateqoriya</span>
+          <strong id="modal-category" class="text-stone-800"></strong>
+        </div>
+      </div>
+
+      <!-- Açıqlama -->
+      <div class="mb-5">
+        <h4 class="text-xs font-bold text-stone-700 mb-1">Geyim Haqqında:</h4>
+        <p id="modal-description" class="text-xs text-stone-600 leading-relaxed bg-sand-card/50 p-3.5 rounded-xl border border-sand-border"></p>
+      </div>
+
+      <!-- Əlaqə və Təklif -->
+      <div class="space-y-2.5">
+        <a id="modal-wa-btn" href="#" target="_blank" class="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white py-3.5 rounded-xl text-sm font-bold shadow-md transition">
+          <span>💬</span> <span>WhatsApp ilə Birbaşa Al</span>
+        </a>
+        
+        <button onclick="toggleOfferBox()" class="w-full bg-bronze-light hover:bg-bronze/10 text-bronze border border-bronze/30 py-3 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2">
+          <span>🏷️</span> <span>Təklif Göndər (Bazarlıq Et)</span>
+        </button>
+      </div>
+
+      <!-- Bazarlıq Xanası -->
+      <div id="offer-box" class="hidden mt-3 p-4 bg-sand-bg rounded-2xl space-y-2 border border-sand-border">
+        <label class="text-xs font-bold text-stone-700 block">Təklif etdiyiniz qiymət (AZN):</label>
+        <div class="flex gap-2">
+          <input type="number" id="offer-price-input" placeholder="Məs: 40" class="w-full p-2.5 text-xs rounded-xl border border-sand-border bg-white focus:outline-none focus:border-bronze">
+          <button onclick="sendOfferViaWA()" class="bg-bronze hover:bg-bronze-hover text-white px-5 text-xs font-bold rounded-xl shadow-sm">
+            Göndər
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ELAN ƏLAVƏ ET MODALI -->
+  <div id="add-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-3xl p-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
+      <button onclick="closeModal('add-modal')" class="absolute top-4 right-4 bg-sand-card hover:bg-sand-border text-stone-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">✕</button>
+      
+      <div class="mb-4">
+        <h2 class="text-xl font-bold text-stone-900 font-serif">Geyiminizi Satışa Qoyun</h2>
+        <p class="text-xs text-stone-500">Məlumatları doldurun, geyiminiz dərhal mağazanınızda görünsün.</p>
+      </div>
+
+      <form onsubmit="handleAddProduct(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold text-stone-700 block mb-1">Geyimin Adı *</label>
+          <input type="text" id="add-title" required placeholder="Məs: Vintage Dəri Gödəkçə" class="w-full p-2.5 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-stone-700 block mb-1">Brend</label>
+            <input type="text" id="add-brand" placeholder="Zara, Mango, Burberry" class="w-full p-2.5 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+          </div>
+          <div>
+            <label class="font-bold text-stone-700 block mb-1">Ölçü *</label>
+            <input type="text" id="add-size" required placeholder="M / 38, L, 42" class="w-full p-2.5 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-stone-700 block mb-1">Kim üçün? *</label>
+            <select id="add-gender" class="w-full p-2.5 border border-sand-border rounded-xl bg-white focus:outline-none focus:border-olive">
+              <option value="women">Qadın</option>
+              <option value="men">Kişi</option>
+              <option value="kids">Uşaq</option>
+              <option value="unisex">Unisex</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-stone-700 block mb-1">Kateqoriya *</label>
+            <select id="add-category" class="w-full p-2.5 border border-sand-border rounded-xl bg-white focus:outline-none focus:border-olive">
+              <option value="clothing">Geyim</option>
+              <option value="shoes">Ayaqqabı</option>
+              <option value="bags">Çanta</option>
+              <option value="accessories">Aksesuar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-stone-700 block mb-1">Qiymət (AZN) *</label>
+            <input type="number" id="add-price" required placeholder="45" class="w-full p-2.5 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+          </div>
+          <div>
+            <label class="font-bold text-stone-700 block mb-1">Vəziyyəti *</label>
+            <select id="add-condition" class="w-full p-2.5 border border-sand-border rounded-xl bg-white focus:outline-none focus:border-olive">
+              <option value="like_new">Az geyinilmiş (Əla)</option>
+              <option value="new_with_tags">Təzə (Etiketli)</option>
+              <option value="good">Yaxşı</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-stone-700 block mb-1">WhatsApp Nömrə *</label>
+            <input type="tel" id="add-phone" required placeholder="0501234567" class="w-full p-2.5 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+          </div>
+          <div>
+            <label class="font-bold text-stone-700 block mb-1">Şəhər *</label>
+            <select id="add-city" class="w-full p-2.5 border border-sand-border rounded-xl bg-white focus:outline-none focus:border-olive">
+              <option value="Bakı">Bakı</option>
+              <option value="Sumqayıt">Sumqayıt</option>
+              <option value="Gəncə">Gəncə</option>
+              <option value="Digər">Digər</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="font-bold text-stone-700 block mb-1">Şəkil Linki (URL)</label>
+          <input type="url" id="add-img" placeholder="https://..." class="w-full p-2.5 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+        </div>
+
+        <div>
+          <label class="font-bold text-stone-700 block mb-1">Açıqlama</label>
+          <textarea id="add-description" rows="2" placeholder="Geyimin materialı, istifadə müddəti və s." class="w-full p-2.5 border border-sand-border rounded-xl focus:outline-none focus:border-olive"></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-olive hover:bg-olive-hover text-white py-3 rounded-xl font-bold text-xs shadow-md mt-2 transition">
+          Elanı Yayımla
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. MAĞAZA YARAT / DƏLİŞDİR MODALI -->
+  <div id="store-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl">
+      <button onclick="closeModal('store-modal')" class="absolute top-4 right-4 bg-sand-card hover:bg-sand-border text-stone-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">✕</button>
+      
+      <div class="mb-5 text-center">
+        <span class="text-3xl block mb-1">🏪</span>
+        <h2 class="text-xl font-bold text-stone-900 font-serif">Öz Mağazanı Yarat</h2>
+        <p class="text-xs text-stone-500 mt-1">İstifadə etmədiyin geyimləri öz adınla alıcılarla paylaş.</p>
+      </div>
+
+      <form onsubmit="handleSaveStore(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold text-stone-700 block mb-1">Mağazanın Adı *</label>
+          <input type="text" id="store-name-input" required placeholder="Məs: Leyla's Vintage, Baku Wardrobe" class="w-full p-3 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+        </div>
+
+        <div>
+          <label class="font-bold text-stone-700 block mb-1">Əlaqə WhatsApp Nömrəsi *</label>
+          <input type="tel" id="store-phone-input" required placeholder="0501234567" class="w-full p-3 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+        </div>
+
+        <button type="submit" class="w-full bg-bronze hover:bg-bronze-hover text-white py-3.5 rounded-xl font-bold text-xs shadow-md mt-2 transition">
+          Mağazanı Yadda Saxla
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // İlkin Nümunə Geyimlər
+    const INITIAL_PRODUCTS = [
+      {
+        id: '1',
+        title: 'Vintage Oversize Dəri Gödəkçə',
+        brand: 'Zara Vintage',
+        price: 65,
+        size: 'M / 38',
+        gender: 'women',
+        category: 'clothing',
+        condition: 'like_new',
+        city: 'Bakı',
+        store_name: "Leyla's Wardrobe",
+        description: 'Çox az geyinilib, heç bir defekti yoxdur. İçi yumşaq astarlıdır.',
+        image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80',
+        phone: '994501234567'
+      },
+      {
+        id: '2',
+        title: 'Klassik Bej Trençkot',
+        brand: 'Burberry Style',
+        price: 90,
+        size: 'L / 40',
+        gender: 'women',
+        category: 'clothing',
+        condition: 'new_with_tags',
+        city: 'Bakı',
+        store_name: "Baku Second Hand",
+        description: 'Tamamilə təzədir, etiketi üzərindədir. Razmer uyğun gəlmədiyi üçün satılır.',
+        image: 'https://images.unsplash.com/photo-1544441893-675973e31985?w=600&q=80',
+        phone: '994501234567'
+      },
+      {
+        id: '3',
+        title: 'Retro Üslub Qol Saatı',
+        brand: 'Casio',
+        price: 35,
+        size: 'Unisex',
+        gender: 'unisex',
+        category: 'accessories',
+        condition: 'good',
+        city: 'Sumqayıt',
+        store_name: "Vintage Accessories",
+        description: 'Orijinal Casio vintage model. İdeal vəziyyətdə işləyir.',
+        image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=600&q=80',
+        phone: '994501234567'
+      },
+      {
+        id: '4',
+        title: 'Qəhvəyi Dəri Çanta',
+        brand: 'Massimo Dutti',
+        price: 55,
+        size: 'Standart',
+        gender: 'women',
+        category: 'bags',
+        condition: 'like_new',
+        city: 'Bakı',
+        store_name: "Leyla's Wardrobe",
+        description: 'Təbii dəri çanta, 1-2 dəfə istifadə olunub.',
+        image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=80',
+        phone: '994501234567'
+      }
+    ];
+
+    // LocalStorage
+    let products = JSON.parse(localStorage.getItem('sandiq_products')) || INITIAL_PRODUCTS;
+    let myStore = JSON.parse(localStorage.getItem('sandiq_store')) || null;
+    let activeGender = 'all';
+    let currentProduct = null;
+
+    const CONDITION_MAP = {
+      'new_with_tags': 'Təzə (Etiketli)',
+      'like_new': 'Az geyinilmiş (Əla)',
+      'good': 'Yaxşı'
+    };
+
+    const CATEGORY_MAP = {
+      'clothing': 'Geyim',
+      'shoes': 'Ayaqqabı',
+      'bags': 'Çanta',
+      'accessories': 'Aksesuar'
+    };
+
+    const GENDER_MAP = {
+      'women': 'Qadın',
+      'men': 'Kişi',
+      'kids': 'Uşaq',
+      'unisex': 'Unisex'
+    };
+
+    function initStoreUI() {
+      if(myStore) {
+        document.getElementById('nav-store-btn-text').innerText = myStore.name;
+        document.getElementById('store-name-input').value = myStore.name;
+        document.getElementById('store-phone-input').value = myStore.phone;
+      }
+    }
+
+    function renderProducts(list) {
+      const grid = document.getElementById('product-grid');
+      const emptyState = document.getElementById('empty-state');
+      grid.innerHTML = '';
+
+      if (list.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+      } else {
+        emptyState.classList.add('hidden');
+      }
+
+      list.forEach(p => {
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl border border-sand-border overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 flex flex-col justify-between group";
+        card.onclick = () => openDetailModal(p);
+        
+        card.innerHTML = `
+          <div>
+            <div class="relative w-full h-48 bg-sand-card overflow-hidden">
+              <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+              <span class="absolute top-2.5 right-2.5 bg-white/90 backdrop-blur-md text-stone-800 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm">
+                ${p.size}
+              </span>
+            </div>
+            <div class="p-3.5">
+              <span class="text-[9px] font-bold text-bronze uppercase tracking-widest block mb-0.5">${p.brand || 'Brendsiz'}</span>
+              <h3 class="font-semibold text-stone-900 text-xs line-clamp-1 group-hover:text-olive transition">${p.title}</h3>
+              <p class="text-[10px] text-stone-400 mt-1">${p.store_name || 'Şəxsi Mağaza'} • ${p.city}</p>
+            </div>
+          </div>
+          <div class="px-3.5 pb-3.5 pt-0 flex items-center justify-between border-t border-sand-bg mt-1">
+            <span class="text-sm font-bold text-olive font-serif">${p.price} AZN</span>
+            <span class="text-[9px] text-bronze font-medium bg-bronze-light px-2 py-0.5 rounded-md">Bazarlıqlı</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function setGender(gender, btn) {
+      activeGender = gender;
+      document.querySelectorAll('.gender-btn').forEach(b => {
+        b.className = 'gender-btn bg-white text-stone-600 border border-sand-border px-5 py-2 rounded-xl font-medium hover:bg-sand-card whitespace-nowrap';
+      });
+      btn.className = 'gender-btn active bg-olive text-white px-5 py-2 rounded-xl font-medium shadow-sm whitespace-nowrap';
+      applyFilters();
+    }
+
+    function syncMobileSearch() {
+      const val = document.getElementById('search-input-mobile').value;
+      document.getElementById('search-input').value = val;
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const search = document.getElementById('search-input').value.toLowerCase();
+      const category = document.getElementById('filter-category').value;
+      const condition = document.getElementById('filter-condition').value;
+      const city = document.getElementById('filter-city').value;
+      const sort = document.getElementById('filter-sort').value;
+
+      let result = products.filter(p => {
+        const matchesSearch = p.title.toLowerCase().includes(search) || 
+                              (p.brand && p.brand.toLowerCase().includes(search)) ||
+                              (p.store_name && p.store_name.toLowerCase().includes(search));
+        const matchesGender = activeGender === 'all' || p.gender === activeGender;
+        const matchesCategory = category === 'all' || p.category === category;
+        const matchesCondition = condition === 'all' || p.condition === condition;
+        const matchesCity = city === 'all' || p.city === city;
+
+        return matchesSearch && matchesGender && matchesCategory && matchesCondition && matchesCity;
+      });
+
+      if (sort === 'price_asc') {
+        result.sort((a, b) => a.price - b.price);
+      } else if (sort === 'price_desc') {
+        result.sort((a, b) => b.price - a.price);
+      } else {
+        result.sort((a, b) => Number(b.id) - Number(a.id));
+      }
+
+      renderProducts(result);
+    }
+
+    function resetFilters() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('filter-category').value = 'all';
+      document.getElementById('filter-condition').value = 'all';
+      document.getElementById('filter-city').value = 'all';
+      setGender('all', document.querySelector('.gender-btn'));
+    }
+
+    function openDetailModal(p) {
+      currentProduct = p;
+      document.getElementById('modal-img').src = p.image;
+      document.getElementById('modal-brand').innerText = p.brand || 'Brendsiz';
+      document.getElementById('modal-title').innerText = p.title;
+      document.getElementById('modal-store-name').innerText = `Mağaza: ${p.store_name || 'Şəxsi Satıcı'}`;
+      document.getElementById('modal-price').innerText = `${p.price} AZN`;
+      document.getElementById('modal-city').innerText = p.city || 'Bakı';
+      document.getElementById('modal-size').innerText = p.size;
+      document.getElementById('modal-condition').innerText = CONDITION_MAP[p.condition] || 'Əla';
+      document.getElementById('modal-category').innerText = CATEGORY_MAP[p.category] || 'Geyim';
+      document.getElementById('modal-gender-badge').innerText = GENDER_MAP[p.gender] || 'Unisex';
+      document.getElementById('modal-description').innerText = p.description || 'Açıqlama qeyd olunmayıb.';
+
+      const waMsg = encodeURIComponent(`Salam! Sandıq platformasındakı "${p.title}" (${p.price} AZN) elanınız üçün yazırıram.`);
+      document.getElementById('modal-wa-btn').href = `https://wa.me/${p.phone}?text=${waMsg}`;
+
+      document.getElementById('offer-box').classList.add('hidden');
+      document.getElementById('detail-modal').classList.remove('hidden');
+    }
+
+    function toggleOfferBox() {
+      document.getElementById('offer-box').classList.toggle('hidden');
+    }
+
+    function sendOfferViaWA() {
+      const price = document.getElementById('offer-price-input').value;
+      if(!price) return alert('Lütfən qiymət daxil edin.');
+      
+      const waMsg = encodeURIComponent(`Salam! Sandıq-dakı "${currentProduct.title}" üçün ${price} AZN təklif edirəm. Razısınızsa əlaqə saxlayaq.`);
+      window.open(`https://wa.me/${currentProduct.phone}?text=${waMsg}`, '_blank');
+    }
+
+    function openAddModal() {
+      if(myStore) {
+        document.getElementById('add-phone').value = myStore.phone;
+      }
+      document.getElementById('add-modal').classList.remove('hidden');
+    }
+
+    function openStoreModal() {
+      document.getElementById('store-modal').classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function handleSaveStore(e) {
+      e.preventDefault();
+      myStore = {
+        name: document.getElementById('store-name-input').value,
+        phone: document.getElementById('store-phone-input').value.replace(/[^0-9]/g, '')
+      };
+      localStorage.setItem('sandiq_store', JSON.stringify(myStore));
+      initStoreUI();
+      closeModal('store-modal');
+      alert(`"${myStore.name}" mağazanız uğurla yaradıldı!`);
+    }
+
+    function handleAddProduct(e) {
+      e.preventDefault();
+      
+      const storeName = myStore ? myStore.name : 'Şəxsi Satıcı';
+
+      const newProduct = {
+        id: Date.now().toString(),
+        title: document.getElementById('add-title').value,
+        brand: document.getElementById('add-brand').value,
+        size: document.getElementById('add-size').value,
+        gender: document.getElementById('add-gender').value,
+        category: document.getElementById('add-category').value,
+        price: Number(document.getElementById('add-price').value),
+        condition: document.getElementById('add-condition').value,
+        phone: document.getElementById('add-phone').value.replace(/[^0-9]/g, ''),
+        city: document.getElementById('add-city').value,
+        store_name: storeName,
+        description: document.getElementById('add-description').value,
+        image: document.getElementById('add-img').value || 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&q=80'
+      };
+
+      products.unshift(newProduct);
+      localStorage.setItem('sandiq_products', JSON.stringify(products));
+      
+      applyFilters();
+      closeModal('add-modal');
+      e.target.reset();
+      alert('Geyiminiz mağazanıza və kataloqa əlavə olundu!');
+    }
+
+    // Başlanğıc
+    initStoreUI();
+    applyFilters();
+  </script>
+</body>
+</html>
