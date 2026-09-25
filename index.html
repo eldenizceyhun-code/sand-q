@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sandıq — Geyimlərini satmağın ən asan yolu</title>
   
-  <!-- Google Fonts (Playfair Display & Inter) -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -80,17 +80,22 @@
           </div>
         </div>
 
-        <!-- Düymələr -->
+        <!-- Düymələr & İstifadəçi Bölməsi -->
         <div class="flex items-center gap-2">
-          <a href="#about-section" class="text-xs font-semibold text-stone-600 hover:text-olive px-3 py-2 rounded-xl transition hidden md:block">
+          <a href="#about-section" class="text-xs font-semibold text-stone-600 hover:text-olive px-3 py-2 rounded-xl transition hidden lg:block">
             Haqqımızda
           </a>
-          <button onclick="openStoreModal()" class="bg-sand-card hover:bg-sand-border text-stone-800 text-xs px-3.5 py-2.5 rounded-xl font-medium border border-sand-border transition flex items-center gap-1.5">
-            <span>🏪</span> <span id="nav-store-btn-text">Mağaza Yarat</span>
+          <button onclick="openStoreModal()" class="bg-sand-card hover:bg-sand-border text-stone-800 text-xs px-3 py-2.5 rounded-xl font-medium border border-sand-border transition flex items-center gap-1.5">
+            <span>🏪</span> <span id="nav-store-btn-text" class="hidden sm:inline">Mağaza Yarat</span>
           </button>
-          <button onclick="openAddModal()" class="bg-olive hover:bg-olive-hover text-white text-xs px-4 py-2.5 rounded-xl font-medium shadow-md hover:shadow-lg transition flex items-center gap-1.5">
-            <span>+</span> <span>Elan Sat</span>
+          <button onclick="openAddModal()" class="bg-olive hover:bg-olive-hover text-white text-xs px-3.5 py-2.5 rounded-xl font-medium shadow-md hover:shadow-lg transition flex items-center gap-1.5">
+            <span>+</span> <span class="hidden sm:inline">Elan Sat</span>
           </button>
+
+          <!-- Giriş / Qeydiyyat və Profil Kontrolu -->
+          <div id="auth-btn-container" class="flex items-center ml-1">
+            <!-- JavaScript tərəfindən idarə olunur (Giriş/Qeydiyyat və ya İstifadəçi Profili) -->
+          </div>
         </div>
       </div>
 
@@ -104,9 +109,8 @@
       </div>
     </header>
 
-    <!-- HERO / TƏQDİMAT BÖLMƏSİ (Dəqiq Mətn) -->
+    <!-- HERO / TƏQDİMAT BÖLMƏSİ -->
     <section class="relative bg-gradient-to-br from-olive via-olive-soft to-stone-900 text-white overflow-hidden py-12 md:py-16 px-4">
-      <!-- Arxa Fon Bəzək Elementləri -->
       <div class="absolute -top-24 -right-24 w-96 h-96 bg-bronze/20 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-olive-light/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -115,17 +119,14 @@
           İkinci Əl Geyim Marketplace-i
         </span>
 
-        <!-- Tələb olunan 1-ci Giriş Mətni -->
         <h1 class="font-serif text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-amber-50 leading-tight">
           Geyimlərini satmağın ən asan yolu.
         </h1>
 
-        <!-- Tələb olunan 2-ci Giriş Mətni -->
         <p class="text-lg sm:text-2xl font-serif text-bronze-light font-medium italic">
           Şəklini çək. Qiymətini yaz. Mağazan hazırdır.
         </p>
 
-        <!-- Tələb olunan 3-cü Giriş Mətni -->
         <p class="text-xs sm:text-sm text-stone-200 max-w-xl mx-auto leading-relaxed font-light">
           İstifadə etmədiyin geyimləri öz mağazanda yerləşdir, alıcılarla paylaş və sat.
         </p>
@@ -211,13 +212,12 @@
       </div>
     </main>
 
-    <!-- HAQQIMIZDA BÖLMƏSİ (Dəqiq Mətnlər Doldurulmuşdur) -->
+    <!-- HAQQIMIZDA BÖLMƏSİ -->
     <section id="about-section" class="bg-white border-t border-sand-border py-16 px-4 mt-12">
       <div class="max-w-4xl mx-auto space-y-8">
         
         <div class="text-center space-y-2">
           <span class="text-bronze text-xs font-bold uppercase tracking-widest block">Biz kimik?</span>
-          <!-- Tələb olunan Haqqımızda Başlığı -->
           <h2 class="font-serif text-3xl sm:text-4xl font-bold text-stone-900">Haqqımızda</h2>
           <div class="w-12 h-0.5 bg-bronze mx-auto mt-2"></div>
         </div>
@@ -225,23 +225,19 @@
         <div class="grid md:grid-cols-2 gap-8 items-center pt-4">
           
           <div class="space-y-4 text-stone-700 text-sm leading-relaxed">
-            <!-- Tələb olunan 1-ci Paraqraf -->
             <p class="font-semibold text-stone-900 text-base">
               Burada hər kəs öz mağazasını yarada bilər.
             </p>
 
-            <!-- Tələb olunan 2-ci Paraqraf -->
             <p class="text-stone-600">
               İstifadə etmədiyin geyimləri yerləşdir, öz qiymətini müəyyən et və onları sat. Alıcılar isə müxtəlif insanların mağazalarına baxaraq istədikləri məhsulları tapa bilərlər.
             </p>
 
-            <!-- Tələb olunan 3-cü Paraqraf -->
             <p class="text-stone-600 border-l-2 border-olive pl-3 italic">
               Biz ikinci əl alış-verişi daha sadə etmək üçün bu platformanı yaratdıq.
             </p>
           </div>
 
-          <!-- Tələb olunan Yekun Ç çağırış Zolağı -->
           <div class="bg-sand-card p-6 sm:p-8 rounded-3xl border border-sand-border text-center space-y-4 shadow-sm">
             <span class="text-3xl block">📦</span>
             <h3 class="font-serif text-xl sm:text-2xl font-bold text-olive">
@@ -276,7 +272,85 @@
 
   <!-- ==================== MODALLAR ==================== -->
 
-  <!-- 1. MƏHSUL DETAL MODALI -->
+  <!-- 1. GİRİŞ (LOGIN) MODALI -->
+  <div id="login-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl">
+      <button onclick="closeModal('login-modal')" class="absolute top-4 right-4 bg-sand-card hover:bg-sand-border text-stone-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">✕</button>
+      
+      <div class="text-center mb-5">
+        <span class="text-3xl block mb-1">🔑</span>
+        <h2 class="text-xl font-bold text-stone-900 font-serif">Hesaba Giriş</h2>
+        <p class="text-xs text-stone-500 mt-1">Geyim satmaq və alıcılarla əlaqə üçün daxil olun.</p>
+      </div>
+
+      <form onsubmit="handleLogin(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="font-bold text-stone-700 block mb-1">E-poçt və ya Telefon *</label>
+          <input type="text" id="login-email" required placeholder="example@mail.com və ya 0501234567" class="w-full p-3 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+        </div>
+
+        <div>
+          <label class="font-bold text-stone-700 block mb-1">Şifrə *</label>
+          <input type="password" id="login-password" required placeholder="••••••••" class="w-full p-3 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+        </div>
+
+        <button type="submit" class="w-full bg-olive hover:bg-olive-hover text-white py-3.5 rounded-xl font-bold text-xs shadow-md transition">
+          Daxil Ol
+        </button>
+      </form>
+
+      <div class="mt-4 text-center text-xs text-stone-500 border-t border-sand-border pt-3">
+        Hesabınız yoxdur? 
+        <button onclick="switchToRegister()" class="text-bronze font-bold hover:underline ml-1">Qeydiyyatdan keçin</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. QEYDİYYAT (REGISTER) MODALI -->
+  <div id="register-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl">
+      <button onclick="closeModal('register-modal')" class="absolute top-4 right-4 bg-sand-card hover:bg-sand-border text-stone-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">✕</button>
+      
+      <div class="text-center mb-5">
+        <span class="text-3xl block mb-1">✨</span>
+        <h2 class="text-xl font-bold text-stone-900 font-serif">Qeydiyyat</h2>
+        <p class="text-xs text-stone-500 mt-1">Bir neçə saniyəyə şəxsi hesabınızı yaradın.</p>
+      </div>
+
+      <form onsubmit="handleRegister(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold text-stone-700 block mb-1">Ad və Soyad *</label>
+          <input type="text" id="reg-name" required placeholder="Məs: Aysel Məmmədova" class="w-full p-2.5 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+        </div>
+
+        <div>
+          <label class="font-bold text-stone-700 block mb-1">E-poçt *</label>
+          <input type="email" id="reg-email" required placeholder="aysel@example.com" class="w-full p-2.5 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+        </div>
+
+        <div>
+          <label class="font-bold text-stone-700 block mb-1">WhatsApp Nömrəsi *</label>
+          <input type="tel" id="reg-phone" required placeholder="0501234567" class="w-full p-2.5 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+        </div>
+
+        <div>
+          <label class="font-bold text-stone-700 block mb-1">Şifrə *</label>
+          <input type="password" id="reg-password" required placeholder="••••••••" class="w-full p-2.5 border border-sand-border rounded-xl focus:outline-none focus:border-olive">
+        </div>
+
+        <button type="submit" class="w-full bg-bronze hover:bg-bronze-hover text-white py-3 rounded-xl font-bold text-xs shadow-md transition mt-2">
+          Qeydiyyatı Tamamla
+        </button>
+      </form>
+
+      <div class="mt-4 text-center text-xs text-stone-500 border-t border-sand-border pt-3">
+        Artıq hesabınız var? 
+        <button onclick="switchToLogin()" class="text-olive font-bold hover:underline ml-1">Daxil olun</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. MƏHSUL DETAL MODALI -->
   <div id="detail-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
       <button onclick="closeModal('detail-modal')" class="absolute top-4 right-4 bg-sand-card hover:bg-sand-border text-stone-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm z-10 transition">✕</button>
@@ -346,7 +420,7 @@
     </div>
   </div>
 
-  <!-- 2. ELAN ƏLAVƏ ET MODALI -->
+  <!-- 4. ELAN ƏLAVƏ ET MODALI -->
   <div id="add-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-lg rounded-3xl p-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
       <button onclick="closeModal('add-modal')" class="absolute top-4 right-4 bg-sand-card hover:bg-sand-border text-stone-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">✕</button>
@@ -442,7 +516,7 @@
     </div>
   </div>
 
-  <!-- 3. MAĞAZA YARAT / DƏLİŞDİR MODALI -->
+  <!-- 5. MAĞAZA YARAT MODALI -->
   <div id="store-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl">
       <button onclick="closeModal('store-modal')" class="absolute top-4 right-4 bg-sand-card hover:bg-sand-border text-stone-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">✕</button>
@@ -471,7 +545,7 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
+  <!-- JAVASCRIPT MƏNTİQİ -->
   <script>
     // İlkin Nümunə Geyimlər
     const INITIAL_PRODUCTS = [
@@ -540,6 +614,7 @@
     // LocalStorage
     let products = JSON.parse(localStorage.getItem('sandiq_products')) || INITIAL_PRODUCTS;
     let myStore = JSON.parse(localStorage.getItem('sandiq_store')) || null;
+    let currentUser = JSON.parse(localStorage.getItem('sandiq_user')) || null;
     let activeGender = 'all';
     let currentProduct = null;
 
@@ -563,11 +638,92 @@
       'unisex': 'Unisex'
     };
 
-    function initStoreUI() {
-      if(myStore) {
+    // AUTH VƏ İSTİFADƏÇİ İDARƏSİ
+    function updateAuthUI() {
+      const container = document.getElementById('auth-btn-container');
+      
+      if (currentUser) {
+        container.innerHTML = `
+          <div class="flex items-center gap-2 bg-sand-card p-1.5 pl-3 rounded-xl border border-sand-border">
+            <span class="text-xs font-bold text-stone-800">👤 ${currentUser.name.split(' ')[0]}</span>
+            <button onclick="handleLogout()" class="text-[10px] bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded-lg font-bold transition">
+              Çıxış
+            </button>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <button onclick="openLoginModal()" class="bg-bronze hover:bg-bronze-hover text-white text-xs px-3 py-2.5 rounded-xl font-medium shadow-sm transition">
+            Giriş / Qeydiyyat
+          </button>
+        `;
+      }
+
+      if (myStore) {
         document.getElementById('nav-store-btn-text').innerText = myStore.name;
         document.getElementById('store-name-input').value = myStore.name;
         document.getElementById('store-phone-input').value = myStore.phone;
+      }
+    }
+
+    function openLoginModal() {
+      closeModal('register-modal');
+      document.getElementById('login-modal').classList.remove('hidden');
+    }
+
+    function openRegisterModal() {
+      closeModal('login-modal');
+      document.getElementById('register-modal').classList.remove('hidden');
+    }
+
+    function switchToRegister() {
+      openRegisterModal();
+    }
+
+    function switchToLogin() {
+      openLoginModal();
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      
+      currentUser = {
+        name: email.includes('@') ? email.split('@')[0] : 'İstifadəçi',
+        email: email
+      };
+      
+      localStorage.setItem('sandiq_user', JSON.stringify(currentUser));
+      updateAuthUI();
+      closeModal('login-modal');
+      alert(`Xoş gəldiniz!`);
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value;
+      const phone = document.getElementById('reg-phone').value;
+
+      currentUser = { name, email, phone };
+      localStorage.setItem('sandiq_user', JSON.stringify(currentUser));
+      
+      // Avtomatik şəxsi mağazanı da yaradaq
+      if (!myStore) {
+        myStore = { name: `${name.split(' ')[0]}'s Mağazası`, phone: phone };
+        localStorage.setItem('sandiq_store', JSON.stringify(myStore));
+      }
+
+      updateAuthUI();
+      closeModal('register-modal');
+      alert(`Qeydiyyat uğurla tamamlandı, ${name}!`);
+    }
+
+    function handleLogout() {
+      if (confirm('Hesabınızdan çıxmaq istədiyinizə əminsiniz?')) {
+        localStorage.removeItem('sandiq_user');
+        currentUser = null;
+        updateAuthUI();
       }
     }
 
@@ -698,13 +854,25 @@
     }
 
     function openAddModal() {
+      if(!currentUser) {
+        alert('Elan yerləşdirmək üçün öncə daxil olmalısınız.');
+        openLoginModal();
+        return;
+      }
       if(myStore) {
         document.getElementById('add-phone').value = myStore.phone;
+      } else if (currentUser.phone) {
+        document.getElementById('add-phone').value = currentUser.phone;
       }
       document.getElementById('add-modal').classList.remove('hidden');
     }
 
     function openStoreModal() {
+      if(!currentUser) {
+        alert('Mağaza yaratmaq üçün öncə daxil olmalısınız.');
+        openLoginModal();
+        return;
+      }
       document.getElementById('store-modal').classList.remove('hidden');
     }
 
@@ -719,7 +887,7 @@
         phone: document.getElementById('store-phone-input').value.replace(/[^0-9]/g, '')
       };
       localStorage.setItem('sandiq_store', JSON.stringify(myStore));
-      initStoreUI();
+      updateAuthUI();
       closeModal('store-modal');
       alert(`"${myStore.name}" mağazanız uğurla yaradıldı!`);
     }
@@ -727,7 +895,7 @@
     function handleAddProduct(e) {
       e.preventDefault();
       
-      const storeName = myStore ? myStore.name : 'Şəxsi Satıcı';
+      const storeName = myStore ? myStore.name : (currentUser ? `${currentUser.name.split(' ')[0]}'s Mağazası` : 'Şəxsi Satıcı');
 
       const newProduct = {
         id: Date.now().toString(),
@@ -755,8 +923,9 @@
     }
 
     // Başlanğıc
-    initStoreUI();
+    updateAuthUI();
     applyFilters();
   </script>
 </body>
 </html>
+
