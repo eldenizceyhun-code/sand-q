@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Virtual Arzu Hovuzu — Arzularını Həyata Keçir</title>
+  <title>Global Wish Well — Make a Wish & Drop a Coin</title>
   
   <!-- Google Fonts & Tailwind CSS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Cinzel:wght@600;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Canvas Confetti (Qəpik atılanda konfetti effekti) -->
+  <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
@@ -47,7 +47,6 @@
       color: #fff;
     }
 
-    /* Hovuz çərçivəsi və görünüşü */
     .pool-container {
       position: relative;
       width: 320px;
@@ -67,10 +66,9 @@
       }
     }
 
-    /* Su dalğası animatsiyası */
     .water-ripple {
       position: absolute;
-      border: 2px solid rgba(255, 255, 255, 0.7);
+      border: 2px solid rgba(255, 255, 255, 0.8);
       border-radius: 50%;
       transform: translate(-50%, -50%);
       animation: ripple 1.2s ease-out forwards;
@@ -79,7 +77,7 @@
 
     @keyframes ripple {
       0% { width: 0px; height: 0px; opacity: 1; }
-      100% { width: 350px; height: 350px; opacity: 0; }
+      100% { width: 380px; height: 380px; opacity: 0; }
     }
 
     .glass-card {
@@ -92,39 +90,54 @@
 </head>
 <body class="font-sans min-h-screen flex flex-col justify-between relative selection:bg-gold selection:text-black">
 
-  <!-- Arxa Fon: Park Və Təbiət Canvas -->
+  <!-- Real Su Səsi Faylı (Audio HTML Element) -->
+  <audio id="splashAudio" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2578/2578-preview.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Background Park Canvas -->
   <canvas id="parkCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
 
-  <!-- NAVİQASİYA -->
+  <!-- HEADER -->
   <header class="relative z-10 px-6 py-4 flex justify-between items-center max-w-6xl mx-auto w-full">
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 rounded-full bg-gold/20 border border-gold flex items-center justify-center text-xl shadow-lg">
         🪙
       </div>
       <div>
-        <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-wide text-gold">Arzu Hovuzu</h1>
-        <p class="text-[10px] text-emerald-200 tracking-widest uppercase">Virtual Wish Well</p>
+        <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-wide text-gold">Global Wish Well</h1>
+        <p class="text-[10px] text-emerald-200 tracking-widest uppercase">Worldwide Digital Fountain</p>
       </div>
     </div>
 
-    <button onclick="toggleLeaderboard()" class="glass-card hover:bg-white/20 text-white text-xs px-4 py-2.5 rounded-xl font-semibold transition flex items-center gap-2 border border-gold/30 shadow-lg">
-      🏆 <span>Reytinq Cədvəli</span>
-    </button>
+    <div class="flex items-center gap-2">
+      <!-- Valyuta Seçimi -->
+      <select id="currencySelect" onchange="changeCurrency(this.value)" class="glass-card text-xs text-gold border border-gold/40 px-2 py-2 rounded-xl focus:outline-none">
+        <option value="$" class="bg-slate-900">$ USD</option>
+        <option value="€" class="bg-slate-900">€ EUR</option>
+        <option value="₼" class="bg-slate-900">₼ AZN</option>
+        <option value="£" class="bg-slate-900">£ GBP</option>
+      </select>
+
+      <button onclick="toggleLeaderboard()" class="glass-card hover:bg-white/20 text-white text-xs px-3 sm:px-4 py-2.5 rounded-xl font-semibold transition flex items-center gap-2 border border-gold/30 shadow-lg">
+        🏆 <span class="hidden sm:inline">Global Leaderboard</span>
+      </button>
+    </div>
   </header>
 
-  <!-- ƏSAS MƏZMUN -->
+  <!-- MAIN CONTAINER -->
   <main class="relative z-10 max-w-4xl mx-auto px-4 py-4 flex flex-col items-center text-center">
 
     <div class="space-y-2 mb-6">
       <h2 class="font-serif text-2xl sm:text-4xl font-extrabold text-white leading-tight drop-shadow-md">
-        Ürəyində Bir Arzu Tut Və Qəpiyi Hovuza At!
+        Make a Wish & Drop Your Coin
       </h2>
       <p class="text-xs sm:text-sm text-emerald-100 max-w-md mx-auto">
-        Arzularınız tamamilə **məxfidir (privat)**. Hovuzat atılan hər qəpik sizi reytinq cədvəlində zirvəyə qaldırır!
+        Wishes are **100% Private**. Higher contributions put you at the top of the Global Leaderboard!
       </p>
     </div>
 
-    <!-- HOVUZ -->
+    <!-- POOL -->
     <div class="relative group my-2">
       <div id="pool" onclick="triggerWishProcess(event)" class="pool-container flex items-center justify-center transition-transform active:scale-95 shadow-2xl">
         <div id="water-surface" class="absolute inset-0 bg-sky-400/10 pointer-events-none"></div>
@@ -132,133 +145,108 @@
         <div class="text-center space-y-2 pointer-events-none z-10">
           <span class="text-5xl block animate-bounce">🪙</span>
           <span class="text-[11px] font-bold uppercase tracking-widest text-sky-200 bg-black/50 px-4 py-1.5 rounded-full border border-sky-300/30 shadow-lg">
-            Atmaq üçün hovuza toxun
+            Tap to toss a coin
           </span>
         </div>
       </div>
     </div>
 
-    <!-- MƏBLƏĞ SEÇİMİ -->
+    <!-- AMOUNT SELECTOR -->
     <div class="mt-6 space-y-3 w-full max-w-md">
-      <label class="text-xs text-emerald-200 font-semibold block uppercase tracking-wider">İanə Ediləcək Məbləğ (AZN)</label>
+      <label class="text-xs text-emerald-200 font-semibold block uppercase tracking-wider">Select Coin Value</label>
       
-      <div class="grid grid-cols-4 gap-2">
-        <button onclick="selectAmount(1, this)" class="amount-btn bg-gold text-stone-900 font-extrabold text-sm py-3 rounded-xl border border-gold shadow-md">1 ₼</button>
-        <button onclick="selectAmount(5, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20">5 ₼</button>
-        <button onclick="selectAmount(10, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20">10 ₼</button>
-        <button onclick="selectAmount(50, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20">50 ₼</button>
+      <div class="grid grid-cols-4 gap-2" id="amountButtons">
+        <button onclick="selectAmount(1, this)" class="amount-btn bg-gold text-stone-900 font-extrabold text-sm py-3 rounded-xl border border-gold shadow-md">1 <span class="curr">$</span></button>
+        <button onclick="selectAmount(5, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20">5 <span class="curr">$</span></button>
+        <button onclick="selectAmount(10, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20">10 <span class="curr">$</span></button>
+        <button onclick="selectAmount(50, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20">50 <span class="curr">$</span></button>
       </div>
     </div>
 
   </main>
 
-  <!-- ARZU YAZMA MODALI -->
+  <!-- WISH MODAL -->
   <div id="wishModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card w-full max-w-md rounded-3xl p-6 relative border border-gold/40 shadow-2xl text-left">
       <button onclick="closeModal('wishModal')" class="absolute top-4 right-4 text-stone-400 hover:text-white font-bold text-sm bg-white/10 rounded-full w-8 h-8 flex items-center justify-center">✕</button>
 
       <div class="text-center mb-5">
         <span class="text-4xl block mb-2">🔒</span>
-        <h3 class="font-serif text-xl font-bold text-gold">Arzunu Hovuza Pıçılda</h3>
-        <p class="text-xs text-stone-300 mt-1">Bu arzu tamamilə məxfidir. Sizdən başqa heç kim oxuya bilməz.</p>
+        <h3 class="font-serif text-xl font-bold text-gold">Whisper Your Secret Wish</h3>
+        <p class="text-xs text-stone-300 mt-1">Your wish is completely private. Only you know what you wrote.</p>
       </div>
 
       <form onsubmit="submitWish(event)" class="space-y-4 text-xs">
         <div>
-          <label class="font-bold text-stone-200 block mb-1">Adınız / Ləqəbiniz (Reytinqdə görünəcək) *</label>
-          <input type="text" id="userName" required placeholder="Məs: Cəsur Arzuör" class="w-full p-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-stone-400 focus:outline-none focus:border-gold">
+          <label class="font-bold text-stone-200 block mb-1">Your Name / Alias (Visible on Leaderboard) *</label>
+          <input type="text" id="userName" required placeholder="e.g. Alex Drake" class="w-full p-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-stone-400 focus:outline-none focus:border-gold">
         </div>
 
         <div>
-          <label class="font-bold text-stone-200 block mb-1">Gizli Arzuladığınız Şey *</label>
-          <textarea id="userWish" required rows="3" placeholder="Gələcək layihəmin uğurlu olması..." class="w-full p-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-stone-400 focus:outline-none focus:border-gold"></textarea>
+          <label class="font-bold text-stone-200 block mb-1">Your Secret Wish *</label>
+          <textarea id="userWish" required rows="3" placeholder="I wish for good health and global success..." class="w-full p-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-stone-400 focus:outline-none focus:border-gold"></textarea>
         </div>
 
         <div class="bg-gold/10 p-3 rounded-xl border border-gold/30 text-[11px] text-gold-light flex justify-between items-center">
-          <span>Atılacaq Məbləğ:</span>
-          <strong id="modalAmountDisplay" class="text-sm font-bold text-gold">1 AZN</strong>
+          <span>Coin Value:</span>
+          <strong id="modalAmountDisplay" class="text-sm font-bold text-gold">1 $</strong>
         </div>
 
         <button type="submit" class="w-full bg-gold hover:bg-gold-dark text-stone-950 font-extrabold py-3.5 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
-          🪙 Qəpiyi At Və Arzunu Göndər
+          🪙 Drop Coin & Send Wish
         </button>
       </form>
     </div>
   </div>
 
-  <!-- REYTİNQ CƏDVƏLİ MODALI -->
+  <!-- LEADERBOARD MODAL -->
   <div id="leaderboardModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card w-full max-w-md rounded-3xl p-6 relative border border-gold/40 shadow-2xl text-left max-h-[85vh] flex flex-col">
       <button onclick="closeModal('leaderboardModal')" class="absolute top-4 right-4 text-stone-400 hover:text-white font-bold text-sm bg-white/10 rounded-full w-8 h-8 flex items-center justify-center">✕</button>
 
       <div class="text-center mb-4">
         <span class="text-3xl block mb-1">🏆</span>
-        <h3 class="font-serif text-xl font-bold text-gold">Ən Böyük Arzu Edənlər</h3>
-        <p class="text-xs text-stone-300 mt-1">Hovuza ən çox qəpik atan xeyirxahlar</p>
+        <h3 class="font-serif text-xl font-bold text-gold">Global Top Wishers</h3>
+        <p class="text-xs text-stone-300 mt-1">People who tossed the most coins into the well</p>
       </div>
 
       <div id="leaderboardList" class="space-y-2.5 overflow-y-auto pr-1 flex-1 text-xs my-2">
-        <!-- JS dolacaq -->
+        <!-- JS populates this -->
       </div>
     </div>
   </div>
 
   <footer class="relative z-10 text-center py-4 text-[11px] text-emerald-200/60">
-    © 2026 Virtual Arzu Hovuzu • Arzularınız çin olsun!
+    © 2026 Global Wish Well • May all your wishes come true!
   </footer>
 
-  <!-- SKRİPTLƏR (SƏS, PARKA ANİMASİYASI VƏ MƏNTİQ) -->
+  <!-- SCRIPT & AUDIO SYSTEM -->
   <script>
     let currentAmount = 1;
-    let audioCtx = null;
+    let selectedCurrency = "$";
 
-    // Brauzer blokunu aradan qaldıran audio təyin olunması
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
+    // Reallıqda Su Şappıltısı Səsi Effekti
+    function playSplashSound() {
+      const audio = document.getElementById('splashAudio');
+      if (audio) {
+        audio.currentTime = 0; // Səsi sıfırlayır
+        audio.play().catch(err => {
+          console.log("Audio play allowed after user interaction.");
+        });
       }
     }
 
-    // Təbii su "pıqq" (splash) səs effekti
-    function playWaterSplashSound() {
-      initAudio();
-
-      const bufferSize = audioCtx.sampleRate * 0.4; 
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
-      }
-
-      const noise = audioCtx.createBufferSource();
-      noise.buffer = buffer;
-
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(600, audioCtx.currentTime);
-      filter.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.3);
-
-      const gain = audioCtx.createGain();
-      gain.gain.setValueAtTime(0.8, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      noise.start();
+    function changeCurrency(symbol) {
+      selectedCurrency = symbol;
+      document.querySelectorAll('.curr').forEach(el => el.innerText = symbol);
+      document.getElementById('modalAmountDisplay').innerText = `${currentAmount} ${selectedCurrency}`;
     }
 
-    // Reytinq
-    let leaderboard = JSON.parse(localStorage.getItem('wish_leaderboard')) || [
-      { name: "Aysel M.", amount: 150 },
-      { name: "Orxan K.", amount: 85 },
-      { name: "Rauf T.", amount: 50 },
-      { name: "Nigar Ə.", amount: 20 }
+    let leaderboard = JSON.parse(localStorage.getItem('global_wish_leaderboard')) || [
+      { name: "John D. (USA)", amount: 250, curr: "$" },
+      { name: "Aysel M. (AZE)", amount: 150, curr: "₼" },
+      { name: "Elena R. (ESP)", amount: 90, curr: "€" },
+      { name: "Liam P. (UK)", amount: 50, curr: "£" }
     ];
 
     function selectAmount(val, btn) {
@@ -271,9 +259,9 @@
 
     function triggerWishProcess(event) {
       createRipple(event);
-      playWaterSplashSound();
+      playSplashSound(); // Su şappıltısı səsini oxudur
 
-      document.getElementById('modalAmountDisplay').innerText = `${currentAmount} AZN`;
+      document.getElementById('modalAmountDisplay').innerText = `${currentAmount} ${selectedCurrency}`;
       document.getElementById('wishModal').classList.remove('hidden');
     }
 
@@ -298,8 +286,8 @@
       if (!name || !wish) return;
 
       confetti({
-        particleCount: 80,
-        spread: 70,
+        particleCount: 100,
+        spread: 80,
         origin: { y: 0.6 }
       });
 
@@ -307,16 +295,16 @@
       if (existingUser) {
         existingUser.amount += currentAmount;
       } else {
-        leaderboard.push({ name, amount: currentAmount });
+        leaderboard.push({ name, amount: currentAmount, curr: selectedCurrency });
       }
 
       leaderboard.sort((a, b) => b.amount - a.amount);
-      localStorage.setItem('wish_leaderboard', JSON.stringify(leaderboard));
+      localStorage.setItem('global_wish_leaderboard', JSON.stringify(leaderboard));
 
       closeModal('wishModal');
       e.target.reset();
 
-      alert(`Arzunuz hovuza düşdü! Şəxsi arzunuz gizli qaldı, amma ${currentAmount} AZN ianənizlə reytinqdə yerinizi aldınız! ✨`);
+      alert(`Your wish has been tossed into the well! Your secret wish remains private, but your contribution of ${currentAmount} ${selectedCurrency} ranks you on the Global Leaderboard! ✨`);
     }
 
     function toggleLeaderboard() {
@@ -332,7 +320,7 @@
             <span class="text-base">${medal}</span>
             <span class="font-bold text-white">${item.name}</span>
           </div>
-          <strong class="text-gold font-serif text-sm">${item.amount} AZN</strong>
+          <strong class="text-gold font-serif text-sm">${item.amount} ${item.curr || '$'}</strong>
         `;
         list.appendChild(row);
       });
