@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Global Wish Well — Make a Wish & Drop a Coin</title>
+  <title>Global Wish Well — Make a Wish & Save the World</title>
   
   <!-- Google Fonts & Tailwind CSS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,8 +49,8 @@
 
     .pool-container {
       position: relative;
-      width: 320px;
-      height: 320px;
+      width: 310px;
+      height: 310px;
       border-radius: 50%;
       background: radial-gradient(circle, #0284c7 0%, #0369a1 70%, #0c4a6e 100%);
       border: 12px solid #78716c;
@@ -61,8 +61,8 @@
 
     @media (min-width: 640px) {
       .pool-container {
-        width: 420px;
-        height: 420px;
+        width: 400px;
+        height: 400px;
       }
     }
 
@@ -86,32 +86,44 @@
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.15);
     }
+
+    /* Qəpiklərin animasiya effektləri */
+    .coin-fire {
+      filter: drop-shadow(0 0 12px #f97316);
+      animation: fireGlow 0.8s infinite alternate;
+    }
+    @keyframes fireGlow {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); filter: drop-shadow(0 0 20px #ef4444); }
+    }
+
+    .coin-diamond {
+      filter: drop-shadow(0 0 15px #38bdf8);
+      animation: diamondGlow 1s infinite alternate;
+    }
+    @keyframes diamondGlow {
+      from { filter: drop-shadow(0 0 10px #38bdf8); }
+      to { filter: drop-shadow(0 0 25px #a855f7); }
+    }
   </style>
 </head>
 <body class="font-sans min-h-screen flex flex-col justify-between relative selection:bg-gold selection:text-black">
 
-  <!-- Real Su Səsi Faylı (Audio HTML Element) -->
-  <audio id="splashAudio" preload="auto">
-    <source src="https://assets.mixkit.co/active_storage/sfx/2578/2578-preview.mp3" type="audio/mpeg">
-  </audio>
-
-  <!-- Background Park Canvas -->
   <canvas id="parkCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
 
   <!-- HEADER -->
   <header class="relative z-10 px-6 py-4 flex justify-between items-center max-w-6xl mx-auto w-full">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-full bg-gold/20 border border-gold flex items-center justify-center text-xl shadow-lg">
+      <div id="headerCoinIcon" class="w-10 h-10 rounded-full bg-gold/20 border border-gold flex items-center justify-center text-xl shadow-lg transition-all">
         🪙
       </div>
       <div>
         <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-wide text-gold">Global Wish Well</h1>
-        <p class="text-[10px] text-emerald-200 tracking-widest uppercase">Worldwide Digital Fountain</p>
+        <p class="text-[10px] text-emerald-200 tracking-widest uppercase">Make a Wish • Change Lives</p>
       </div>
     </div>
 
     <div class="flex items-center gap-2">
-      <!-- Valyuta Seçimi -->
       <select id="currencySelect" onchange="changeCurrency(this.value)" class="glass-card text-xs text-gold border border-gold/40 px-2 py-2 rounded-xl focus:outline-none">
         <option value="$" class="bg-slate-900">$ USD</option>
         <option value="€" class="bg-slate-900">€ EUR</option>
@@ -120,20 +132,35 @@
       </select>
 
       <button onclick="toggleLeaderboard()" class="glass-card hover:bg-white/20 text-white text-xs px-3 sm:px-4 py-2.5 rounded-xl font-semibold transition flex items-center gap-2 border border-gold/30 shadow-lg">
-        🏆 <span class="hidden sm:inline">Global Leaderboard</span>
+        🏆 <span class="hidden sm:inline">Leaderboard</span>
       </button>
     </div>
   </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="relative z-10 max-w-4xl mx-auto px-4 py-4 flex flex-col items-center text-center">
+  <!-- XEYRİYYƏ BANNERİ (CHARITY PROGRESS BAR) -->
+  <section class="relative z-10 max-w-2xl mx-auto w-full px-4 mb-2">
+    <div class="glass-card rounded-2xl p-3 border border-emerald-500/30 flex flex-col gap-2 shadow-xl">
+      <div class="flex justify-between items-center text-xs">
+        <span class="flex items-center gap-1.5 font-bold text-emerald-300">
+          <span>🌱</span> 20% Impact Fund: Clean Water Well Initiative
+        </span>
+        <span class="text-emerald-200 font-bold">$1,240 / $2,000</span>
+      </div>
+      <div class="w-full bg-slate-900/60 rounded-full h-2.5 overflow-hidden border border-emerald-500/20">
+        <div class="bg-gradient-to-r from-emerald-500 to-teal-300 h-2.5 rounded-full" style="width: 62%"></div>
+      </div>
+    </div>
+  </section>
 
-    <div class="space-y-2 mb-6">
-      <h2 class="font-serif text-2xl sm:text-4xl font-extrabold text-white leading-tight drop-shadow-md">
-        Make a Wish & Drop Your Coin
+  <!-- MAIN CONTAINER -->
+  <main class="relative z-10 max-w-4xl mx-auto px-4 py-2 flex flex-col items-center text-center">
+
+    <div class="space-y-1 mb-4">
+      <h2 class="font-serif text-2xl sm:text-3xl font-extrabold text-white leading-tight drop-shadow-md">
+        Make a Wish & Save the World
       </h2>
-      <p class="text-xs sm:text-sm text-emerald-100 max-w-md mx-auto">
-        Wishes are **100% Private**. Higher contributions put you at the top of the Global Leaderboard!
+      <p class="text-xs text-emerald-100 max-w-md mx-auto">
+        20% of all contributions fund real-world eco & clean water projects!
       </p>
     </div>
 
@@ -143,23 +170,45 @@
         <div id="water-surface" class="absolute inset-0 bg-sky-400/10 pointer-events-none"></div>
         
         <div class="text-center space-y-2 pointer-events-none z-10">
-          <span class="text-5xl block animate-bounce">🪙</span>
+          <span id="centerCoinDisplay" class="text-5xl block animate-bounce">🪙</span>
           <span class="text-[11px] font-bold uppercase tracking-widest text-sky-200 bg-black/50 px-4 py-1.5 rounded-full border border-sky-300/30 shadow-lg">
-            Tap to toss a coin
+            Tap to toss coin
           </span>
         </div>
       </div>
     </div>
 
+    <!-- QƏPİK EFFEKTLƏRİ SEÇİMİ (COIN SKINS) -->
+    <div class="mt-4 w-full max-w-md">
+      <label class="text-[11px] text-gold font-bold block uppercase tracking-wider mb-2">Select Special Coin Effect (Skin)</label>
+      <div class="grid grid-cols-3 gap-2 text-xs">
+        <button onclick="selectSkin('gold', 0, this)" class="skin-btn glass-card p-2 rounded-xl border border-gold flex flex-col items-center gap-1 hover:bg-gold/10">
+          <span class="text-2xl">🪙</span>
+          <span class="font-bold text-gold">Classic Gold</span>
+          <span class="text-[10px] text-stone-300">Free</span>
+        </button>
+
+        <button onclick="selectSkin('fire', 3, this)" class="skin-btn glass-card p-2 rounded-xl border border-white/20 flex flex-col items-center gap-1 hover:bg-orange-500/10">
+          <span class="text-2xl">🔥</span>
+          <span class="font-bold text-orange-400">Alovlu Qəpik</span>
+          <span class="text-[10px] text-orange-300">+3 <span class="curr">$</span></span>
+        </button>
+
+        <button onclick="selectSkin('diamond', 5, this)" class="skin-btn glass-card p-2 rounded-xl border border-white/20 flex flex-col items-center gap-1 hover:bg-sky-500/10">
+          <span class="text-2xl">💎</span>
+          <span class="font-bold text-sky-300">Brilliant Qəpik</span>
+          <span class="text-[10px] text-sky-200">+5 <span class="curr">$</span></span>
+        </button>
+      </div>
+    </div>
+
     <!-- AMOUNT SELECTOR -->
-    <div class="mt-6 space-y-3 w-full max-w-md">
-      <label class="text-xs text-emerald-200 font-semibold block uppercase tracking-wider">Select Coin Value</label>
-      
+    <div class="mt-4 space-y-2 w-full max-w-md">
       <div class="grid grid-cols-4 gap-2" id="amountButtons">
-        <button onclick="selectAmount(1, this)" class="amount-btn bg-gold text-stone-900 font-extrabold text-sm py-3 rounded-xl border border-gold shadow-md">1 <span class="curr">$</span></button>
-        <button onclick="selectAmount(5, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20">5 <span class="curr">$</span></button>
-        <button onclick="selectAmount(10, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20">10 <span class="curr">$</span></button>
-        <button onclick="selectAmount(50, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20">50 <span class="curr">$</span></button>
+        <button onclick="selectAmount(1, this)" class="amount-btn bg-gold text-stone-900 font-extrabold text-xs py-2.5 rounded-xl border border-gold shadow-md">1 <span class="curr">$</span></button>
+        <button onclick="selectAmount(5, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-xs py-2.5 rounded-xl border border-white/20">5 <span class="curr">$</span></button>
+        <button onclick="selectAmount(10, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-xs py-2.5 rounded-xl border border-white/20">10 <span class="curr">$</span></button>
+        <button onclick="selectAmount(50, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-xs py-2.5 rounded-xl border border-white/20">50 <span class="curr">$</span></button>
       </div>
     </div>
 
@@ -170,29 +219,40 @@
     <div class="glass-card w-full max-w-md rounded-3xl p-6 relative border border-gold/40 shadow-2xl text-left">
       <button onclick="closeModal('wishModal')" class="absolute top-4 right-4 text-stone-400 hover:text-white font-bold text-sm bg-white/10 rounded-full w-8 h-8 flex items-center justify-center">✕</button>
 
-      <div class="text-center mb-5">
-        <span class="text-4xl block mb-2">🔒</span>
+      <div class="text-center mb-4">
+        <span class="text-3xl block mb-1">🔒</span>
         <h3 class="font-serif text-xl font-bold text-gold">Whisper Your Secret Wish</h3>
-        <p class="text-xs text-stone-300 mt-1">Your wish is completely private. Only you know what you wrote.</p>
+        <p class="text-xs text-stone-300 mt-1">Your wish is private. Only your name appears on the leaderboard.</p>
       </div>
 
-      <form onsubmit="submitWish(event)" class="space-y-4 text-xs">
+      <form onsubmit="submitWish(event)" class="space-y-3 text-xs">
         <div>
-          <label class="font-bold text-stone-200 block mb-1">Your Name / Alias (Visible on Leaderboard) *</label>
-          <input type="text" id="userName" required placeholder="e.g. Alex Drake" class="w-full p-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-stone-400 focus:outline-none focus:border-gold">
+          <label class="font-bold text-stone-200 block mb-1">Your Name / Alias *</label>
+          <input type="text" id="userName" required placeholder="e.g. Alex Drake" class="w-full p-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-stone-400 focus:outline-none focus:border-gold">
         </div>
 
         <div>
           <label class="font-bold text-stone-200 block mb-1">Your Secret Wish *</label>
-          <textarea id="userWish" required rows="3" placeholder="I wish for good health and global success..." class="w-full p-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-stone-400 focus:outline-none focus:border-gold"></textarea>
+          <textarea id="userWish" required rows="2" placeholder="I wish for happiness and global success..." class="w-full p-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-stone-400 focus:outline-none focus:border-gold"></textarea>
+        </div>
+
+        <!-- REYTİNQ SABİTLƏNMƏ (PIN / HIGHLIGHT) PARÇASI -->
+        <div class="bg-amber-500/10 p-3 rounded-xl border border-amber-500/30 space-y-1.5">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="pinWishCheck" onchange="togglePinOption(this.checked)" class="accent-amber-400 w-4 h-4">
+            <span class="font-bold text-amber-300 text-xs">📌 VIP Highlight & Pin (Reytinqdə Sabitlənmə)</span>
+          </label>
+          <p class="text-[10px] text-amber-100/70 pl-6">
+            Adınızı dərhal xüsusi tac 👑 və qızıl çərçivə ilə ilk 3-lükdə göstərir (+15 <span class="curr">$</span>).
+          </p>
         </div>
 
         <div class="bg-gold/10 p-3 rounded-xl border border-gold/30 text-[11px] text-gold-light flex justify-between items-center">
-          <span>Coin Value:</span>
+          <span>Total Contribution:</span>
           <strong id="modalAmountDisplay" class="text-sm font-bold text-gold">1 $</strong>
         </div>
 
-        <button type="submit" class="w-full bg-gold hover:bg-gold-dark text-stone-950 font-extrabold py-3.5 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
+        <button type="submit" class="w-full bg-gold hover:bg-gold-dark text-stone-950 font-extrabold py-3 rounded-xl shadow-lg transition text-xs uppercase tracking-wider">
           🪙 Drop Coin & Send Wish
         </button>
       </form>
@@ -206,62 +266,112 @@
 
       <div class="text-center mb-4">
         <span class="text-3xl block mb-1">🏆</span>
-        <h3 class="font-serif text-xl font-bold text-gold">Global Top Wishers</h3>
-        <p class="text-xs text-stone-300 mt-1">People who tossed the most coins into the well</p>
+        <h3 class="font-serif text-xl font-bold text-gold">Global Leaderboard</h3>
+        <p class="text-xs text-stone-300 mt-1">Top Wishers & World Savers</p>
       </div>
 
-      <div id="leaderboardList" class="space-y-2.5 overflow-y-auto pr-1 flex-1 text-xs my-2">
+      <div id="leaderboardList" class="space-y-2 overflow-y-auto pr-1 flex-1 text-xs my-2">
         <!-- JS populates this -->
       </div>
     </div>
   </div>
 
-  <footer class="relative z-10 text-center py-4 text-[11px] text-emerald-200/60">
+  <footer class="relative z-10 text-center py-3 text-[11px] text-emerald-200/60">
     © 2026 Global Wish Well • May all your wishes come true!
   </footer>
 
-  <!-- SCRIPT & AUDIO SYSTEM -->
   <script>
     let currentAmount = 1;
+    let skinPrice = 0;
+    let isPinned = false;
+    let selectedSkin = 'gold';
     let selectedCurrency = "$";
 
-    // Reallıqda Su Şappıltısı Səsi Effekti
-    function playSplashSound() {
-      const audio = document.getElementById('splashAudio');
-      if (audio) {
-        audio.currentTime = 0; // Səsi sıfırlayır
-        audio.play().catch(err => {
-          console.log("Audio play allowed after user interaction.");
-        });
-      }
+    // Tam zəmanətli sintetik su şappıltısı səs Generatoru
+    function playWaterSplashSound() {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.15);
+
+      gain.gain.setValueAtTime(1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.15);
     }
 
     function changeCurrency(symbol) {
       selectedCurrency = symbol;
       document.querySelectorAll('.curr').forEach(el => el.innerText = symbol);
-      document.getElementById('modalAmountDisplay').innerText = `${currentAmount} ${selectedCurrency}`;
+      updateTotalModalDisplay();
+    }
+
+    function selectSkin(type, price, btn) {
+      selectedSkin = type;
+      skinPrice = price;
+
+      document.querySelectorAll('.skin-btn').forEach(b => {
+        b.classList.remove('border-gold', 'bg-white/10');
+        b.classList.add('border-white/20');
+      });
+      btn.classList.add('border-gold', 'bg-white/10');
+
+      const centerIcon = document.getElementById('centerCoinDisplay');
+      const headerIcon = document.getElementById('headerCoinIcon');
+
+      if (type === 'fire') {
+        centerIcon.innerText = '🔥';
+        headerIcon.innerText = '🔥';
+      } else if (type === 'diamond') {
+        centerIcon.innerText = '💎';
+        headerIcon.innerText = '💎';
+      } else {
+        centerIcon.innerText = '🪙';
+        headerIcon.innerText = '🪙';
+      }
+
+      updateTotalModalDisplay();
+    }
+
+    function togglePinOption(checked) {
+      isPinned = checked;
+      updateTotalModalDisplay();
+    }
+
+    function updateTotalModalDisplay() {
+      const pinPrice = isPinned ? 15 : 0;
+      const total = currentAmount + skinPrice + pinPrice;
+      document.getElementById('modalAmountDisplay').innerText = `${total} ${selectedCurrency}`;
     }
 
     let leaderboard = JSON.parse(localStorage.getItem('global_wish_leaderboard')) || [
-      { name: "John D. (USA)", amount: 250, curr: "$" },
-      { name: "Aysel M. (AZE)", amount: 150, curr: "₼" },
-      { name: "Elena R. (ESP)", amount: 90, curr: "€" },
-      { name: "Liam P. (UK)", amount: 50, curr: "£" }
+      { name: "John D. (USA)", amount: 250, curr: "$", pinned: true, skin: 'diamond' },
+      { name: "Aysel M. (AZE)", amount: 150, curr: "₼", pinned: false, skin: 'fire' },
+      { name: "Elena R. (ESP)", amount: 90, curr: "€", pinned: false, skin: 'gold' }
     ];
 
     function selectAmount(val, btn) {
       currentAmount = val;
       document.querySelectorAll('.amount-btn').forEach(b => {
-        b.className = 'amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20';
+        b.className = 'amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-xs py-2.5 rounded-xl border border-white/20';
       });
-      btn.className = 'amount-btn bg-gold text-stone-900 font-extrabold text-sm py-3 rounded-xl border border-gold shadow-md';
+      btn.className = 'amount-btn bg-gold text-stone-900 font-extrabold text-xs py-2.5 rounded-xl border border-gold shadow-md';
+      updateTotalModalDisplay();
     }
 
     function triggerWishProcess(event) {
       createRipple(event);
-      playSplashSound(); // Su şappıltısı səsini oxudur
+      playWaterSplashSound();
 
-      document.getElementById('modalAmountDisplay').innerText = `${currentAmount} ${selectedCurrency}`;
+      updateTotalModalDisplay();
       document.getElementById('wishModal').classList.remove('hidden');
     }
 
@@ -291,20 +401,32 @@
         origin: { y: 0.6 }
       });
 
-      const existingUser = leaderboard.find(u => u.name.toLowerCase() === name.toLowerCase());
-      if (existingUser) {
-        existingUser.amount += currentAmount;
+      const pinPrice = isPinned ? 15 : 0;
+      const totalContribution = currentAmount + skinPrice + pinPrice;
+
+      const newUser = {
+        name: isPinned ? `👑 ${name}` : name,
+        amount: totalContribution,
+        curr: selectedCurrency,
+        pinned: isPinned,
+        skin: selectedSkin
+      };
+
+      if (isPinned) {
+        leaderboard.unshift(newUser);
       } else {
-        leaderboard.push({ name, amount: currentAmount, curr: selectedCurrency });
+        leaderboard.push(newUser);
+        leaderboard.sort((a, b) => b.amount - a.amount);
       }
 
-      leaderboard.sort((a, b) => b.amount - a.amount);
       localStorage.setItem('global_wish_leaderboard', JSON.stringify(leaderboard));
 
       closeModal('wishModal');
       e.target.reset();
+      document.getElementById('pinWishCheck').checked = false;
+      isPinned = false;
 
-      alert(`Your wish has been tossed into the well! Your secret wish remains private, but your contribution of ${currentAmount} ${selectedCurrency} ranks you on the Global Leaderboard! ✨`);
+      alert(`Your wish has been tossed into the well! ${Math.round(totalContribution * 0.2)} ${selectedCurrency} has been contributed to the Eco-Fund! 🌿`);
     }
 
     function toggleLeaderboard() {
@@ -312,13 +434,15 @@
       list.innerHTML = '';
 
       leaderboard.forEach((item, index) => {
-        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🪙';
+        const medal = item.pinned ? '👑' : index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🪙';
+        const icon = item.skin === 'fire' ? '🔥' : item.skin === 'diamond' ? '💎' : '🪙';
+        
         const row = document.createElement('div');
-        row.className = "flex justify-between items-center bg-white/10 p-3 rounded-xl border border-white/10";
+        row.className = `flex justify-between items-center p-3 rounded-xl border ${item.pinned ? 'bg-amber-500/20 border-amber-400/50 shadow-lg' : 'bg-white/10 border-white/10'}`;
         row.innerHTML = `
           <div class="flex items-center gap-2.5">
             <span class="text-base">${medal}</span>
-            <span class="font-bold text-white">${item.name}</span>
+            <span class="font-bold text-white">${item.name} <span class="text-xs opacity-75">${icon}</span></span>
           </div>
           <strong class="text-gold font-serif text-sm">${item.amount} ${item.curr || '$'}</strong>
         `;
