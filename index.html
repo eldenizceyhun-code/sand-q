@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Cinzel:wght@600;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Canvas Confetti (Qəpik atılanda vizual effekt üçün) -->
+  <!-- Canvas Confetti (Qəpik atılanda konfetti effekti) -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
@@ -40,22 +40,21 @@
   </script>
 
   <style>
-    /* Park və Təbiət Fonu Canvas */
     body {
       margin: 0;
       overflow-x: hidden;
-      background: #064e3b; /* Təbii Yaşıllıq Fonu */
+      background: #064e3b;
       color: #fff;
     }
 
-    /* Hovuz Su Dairəsi və Dalğa Effekti */
+    /* Hovuz çərçivəsi və görünüşü */
     .pool-container {
       position: relative;
       width: 320px;
       height: 320px;
       border-radius: 50%;
       background: radial-gradient(circle, #0284c7 0%, #0369a1 70%, #0c4a6e 100%);
-      border: 12px solid #78716c; /* Daş çərçivə */
+      border: 12px solid #78716c;
       box-shadow: 0 0 50px rgba(56, 189, 248, 0.5), inset 0 0 30px rgba(0, 0, 0, 0.6);
       overflow: hidden;
       cursor: pointer;
@@ -68,12 +67,13 @@
       }
     }
 
-    /* Su Dalğalanması Animation */
+    /* Su dalğası animatsiyası */
     .water-ripple {
       position: absolute;
-      border: 2px solid rgba(255, 255, 255, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.7);
       border-radius: 50%;
-      animation: ripple 1.5s linear infinite;
+      transform: translate(-50%, -50%);
+      animation: ripple 1.2s ease-out forwards;
       pointer-events: none;
     }
 
@@ -82,22 +82,8 @@
       100% { width: 350px; height: 350px; opacity: 0; }
     }
 
-    /* Ağac Yarpaqlarının Tərpənməsi */
-    .leaf {
-      position: absolute;
-      background: #22c55e;
-      border-radius: 0 70% 0 70%;
-      opacity: 0.7;
-      animation: wind 4s ease-in-out infinite alternate;
-    }
-
-    @keyframes wind {
-      0% { transform: rotate(0deg) translate(0, 0); }
-      100% { transform: rotate(15deg) translate(10px, 15px); }
-    }
-
     .glass-card {
-      background: rgba(15, 23, 42, 0.75);
+      background: rgba(15, 23, 42, 0.8);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -106,10 +92,10 @@
 </head>
 <body class="font-sans min-h-screen flex flex-col justify-between relative selection:bg-gold selection:text-black">
 
-  <!-- Arxa Fon: Park və Ağaclar Canvas -->
+  <!-- Arxa Fon: Park Və Təbiət Canvas -->
   <canvas id="parkCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
 
-  <!-- NAVİQASİYA / HEADER -->
+  <!-- NAVİQASİYA -->
   <header class="relative z-10 px-6 py-4 flex justify-between items-center max-w-6xl mx-auto w-full">
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 rounded-full bg-gold/20 border border-gold flex items-center justify-center text-xl shadow-lg">
@@ -121,46 +107,43 @@
       </div>
     </div>
 
-    <button onclick="toggleLeaderboard()" class="glass-card hover:bg-white/20 text-white text-xs px-4 py-2.5 rounded-xl font-semibold transition flex items-center gap-2 border border-gold/30">
+    <button onclick="toggleLeaderboard()" class="glass-card hover:bg-white/20 text-white text-xs px-4 py-2.5 rounded-xl font-semibold transition flex items-center gap-2 border border-gold/30 shadow-lg">
       🏆 <span>Reytinq Cədvəli</span>
     </button>
   </header>
 
-  <!-- ƏSAS MƏZMUN: HOVUZ VƏ İNTERAKSİYA -->
-  <main class="relative z-10 max-w-4xl mx-auto px-4 py-6 flex flex-col items-center text-center">
+  <!-- ƏSAS MƏZMUN -->
+  <main class="relative z-10 max-w-4xl mx-auto px-4 py-4 flex flex-col items-center text-center">
 
-    <!-- Mətn -->
     <div class="space-y-2 mb-6">
-      <h2 class="font-serif text-2xl sm:text-4xl font-extrabold text-white leading-tight">
-        Ürəyində Bir Arzu Tut Və Qəpiyi Hovuzat At!
+      <h2 class="font-serif text-2xl sm:text-4xl font-extrabold text-white leading-tight drop-shadow-md">
+        Ürəyində Bir Arzu Tut Və Qəpiyi Hovuza At!
       </h2>
       <p class="text-xs sm:text-sm text-emerald-100 max-w-md mx-auto">
         Arzularınız tamamilə **məxfidir (privat)**. Hovuzat atılan hər qəpik sizi reytinq cədvəlində zirvəyə qaldırır!
       </p>
     </div>
 
-    <!-- HOVUZ (INTERACTIVE POOL) -->
+    <!-- HOVUZ -->
     <div class="relative group my-2">
       <div id="pool" onclick="triggerWishProcess(event)" class="pool-container flex items-center justify-center transition-transform active:scale-95 shadow-2xl">
-        <!-- Su effekti təbəqəsi -->
         <div id="water-surface" class="absolute inset-0 bg-sky-400/10 pointer-events-none"></div>
         
-        <!-- Mərkəzdəki Qıfıl / Məxfilik İşarəsi -->
-        <div class="text-center space-y-1 pointer-events-none z-10">
-          <span class="text-4xl sm:text-5xl block animate-bounce">🪙</span>
-          <span class="text-[11px] font-bold uppercase tracking-widest text-sky-200 bg-black/40 px-3 py-1 rounded-full border border-sky-300/30">
-            Atmaq üçün toxun
+        <div class="text-center space-y-2 pointer-events-none z-10">
+          <span class="text-5xl block animate-bounce">🪙</span>
+          <span class="text-[11px] font-bold uppercase tracking-widest text-sky-200 bg-black/50 px-4 py-1.5 rounded-full border border-sky-300/30 shadow-lg">
+            Atmaq üçün hovuza toxun
           </span>
         </div>
       </div>
     </div>
 
-    <!-- MƏBLƏĞ SEÇİMİ DÜYMƏLƏRİ -->
-    <div class="mt-8 space-y-3 w-full max-w-md">
+    <!-- MƏBLƏĞ SEÇİMİ -->
+    <div class="mt-6 space-y-3 w-full max-w-md">
       <label class="text-xs text-emerald-200 font-semibold block uppercase tracking-wider">İanə Ediləcək Məbləğ (AZN)</label>
       
       <div class="grid grid-cols-4 gap-2">
-        <button onclick="selectAmount(1, this)" class="amount-btn active bg-gold text-stone-900 font-extrabold text-sm py-3 rounded-xl border border-gold shadow-md">1 ₼</button>
+        <button onclick="selectAmount(1, this)" class="amount-btn bg-gold text-stone-900 font-extrabold text-sm py-3 rounded-xl border border-gold shadow-md">1 ₼</button>
         <button onclick="selectAmount(5, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20">5 ₼</button>
         <button onclick="selectAmount(10, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20">10 ₼</button>
         <button onclick="selectAmount(50, this)" class="amount-btn glass-card hover:bg-gold/20 text-white font-extrabold text-sm py-3 rounded-xl border border-white/20">50 ₼</button>
@@ -172,7 +155,7 @@
   <!-- ARZU YAZMA MODALI -->
   <div id="wishModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card w-full max-w-md rounded-3xl p-6 relative border border-gold/40 shadow-2xl text-left">
-      <button onclick="closeModal('wishModal')" class="absolute top-4 right-4 text-stone-400 hover:text-white font-bold text-sm bg-white/10 rounded-full w-8 h-8">✕</button>
+      <button onclick="closeModal('wishModal')" class="absolute top-4 right-4 text-stone-400 hover:text-white font-bold text-sm bg-white/10 rounded-full w-8 h-8 flex items-center justify-center">✕</button>
 
       <div class="text-center mb-5">
         <span class="text-4xl block mb-2">🔒</span>
@@ -206,38 +189,47 @@
   <!-- REYTİNQ CƏDVƏLİ MODALI -->
   <div id="leaderboardModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card w-full max-w-md rounded-3xl p-6 relative border border-gold/40 shadow-2xl text-left max-h-[85vh] flex flex-col">
-      <button onclick="closeModal('leaderboardModal')" class="absolute top-4 right-4 text-stone-400 hover:text-white font-bold text-sm bg-white/10 rounded-full w-8 h-8">✕</button>
+      <button onclick="closeModal('leaderboardModal')" class="absolute top-4 right-4 text-stone-400 hover:text-white font-bold text-sm bg-white/10 rounded-full w-8 h-8 flex items-center justify-center">✕</button>
 
       <div class="text-center mb-4">
         <span class="text-3xl block mb-1">🏆</span>
         <h3 class="font-serif text-xl font-bold text-gold">Ən Böyük Arzu Edənlər</h3>
-        <p class="text-xs text-stone-300 mt-1">Hovuza en çox qəpik atan xeyirxahlar</p>
+        <p class="text-xs text-stone-300 mt-1">Hovuza ən çox qəpik atan xeyirxahlar</p>
       </div>
 
-      <!-- Reytinq Siyahısı -->
       <div id="leaderboardList" class="space-y-2.5 overflow-y-auto pr-1 flex-1 text-xs my-2">
-        <!-- JS ilə dolacaq -->
+        <!-- JS dolacaq -->
       </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
   <footer class="relative z-10 text-center py-4 text-[11px] text-emerald-200/60">
     © 2026 Virtual Arzu Hovuzu • Arzularınız çin olsun!
   </footer>
 
-  <!-- SƏS SİSTEMİ VƏ MƏNTİQ -->
+  <!-- SKRİPTLƏR (SƏS, PARKA ANİMASİYASI VƏ MƏNTİQ) -->
   <script>
     let currentAmount = 1;
+    let audioCtx = null;
 
-    // Sintetik Su Şappıltısı Səsi (Web Audio API vasitəsilə)
+    // Brauzer blokunu aradan qaldıran audio təyin olunması
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // Təbii su "pıqq" (splash) səs effekti
     function playWaterSplashSound() {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      
-      // Ağ Səs (White Noise) generatoru
-      const bufferSize = audioCtx.sampleRate * 0.5; 
+      initAudio();
+
+      const bufferSize = audioCtx.sampleRate * 0.4; 
       const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
       const data = buffer.getChannelData(0);
+
       for (let i = 0; i < bufferSize; i++) {
         data[i] = Math.random() * 2 - 1;
       }
@@ -245,15 +237,14 @@
       const noise = audioCtx.createBufferSource();
       noise.buffer = buffer;
 
-      // Su Filtri
       const filter = audioCtx.createBiquadFilter();
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(800, audioCtx.currentTime);
-      filter.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.4);
+      filter.frequency.setValueAtTime(600, audioCtx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.3);
 
       const gain = audioCtx.createGain();
-      gain.gain.setValueAtTime(1, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+      gain.gain.setValueAtTime(0.8, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
 
       noise.connect(filter);
       filter.connect(gain);
@@ -262,7 +253,7 @@
       noise.start();
     }
 
-    // Reytinq Baza Nümunəsi
+    // Reytinq
     let leaderboard = JSON.parse(localStorage.getItem('wish_leaderboard')) || [
       { name: "Aysel M.", amount: 150 },
       { name: "Orxan K.", amount: 85 },
@@ -279,12 +270,9 @@
     }
 
     function triggerWishProcess(event) {
-      // Su dalğası yarat
       createRipple(event);
-      // Su səsi
       playWaterSplashSound();
 
-      // Modalı aç
       document.getElementById('modalAmountDisplay').innerText = `${currentAmount} AZN`;
       document.getElementById('wishModal').classList.remove('hidden');
     }
@@ -299,7 +287,7 @@
       ripple.style.top = `${e.clientY - rect.top}px`;
       
       pool.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 1500);
+      setTimeout(() => ripple.remove(), 1200);
     }
 
     function submitWish(e) {
@@ -309,14 +297,12 @@
 
       if (!name || !wish) return;
 
-      // Konfetti effekti
       confetti({
         particleCount: 80,
         spread: 70,
         origin: { y: 0.6 }
       });
 
-      // Reytinqi yenilə
       const existingUser = leaderboard.find(u => u.name.toLowerCase() === name.toLowerCase());
       if (existingUser) {
         existingUser.amount += currentAmount;
@@ -330,7 +316,7 @@
       closeModal('wishModal');
       e.target.reset();
 
-      alert(`Arzunuz hovuza düşdü! Şəxsi arzunuz gizli qaldı, amma ${currentAmount} AZN töhfənizlə reytinqdə yerinizi aldınız! ✨`);
+      alert(`Arzunuz hovuza düşdü! Şəxsi arzunuz gizli qaldı, amma ${currentAmount} AZN ianənizlə reytinqdə yerinizi aldınız! ✨`);
     }
 
     function toggleLeaderboard() {
@@ -358,7 +344,7 @@
       document.getElementById(id).classList.add('hidden');
     }
 
-    // ARXA FON PARK VƏ AĞAC CANVAS AANİMASİYASI
+    // PARK CANVAS ANİMASİYASI
     const canvas = document.getElementById('parkCanvas');
     const ctx = canvas.getContext('2d');
 
@@ -369,26 +355,23 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    // Yarpaqlar
-    const leaves = Array.from({ length: 25 }, () => ({
+    const leaves = Array.from({ length: 30 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      size: Math.random() * 8 + 4,
-      speedY: Math.random() * 1 + 0.5,
-      speedX: Math.random() * 0.8 - 0.4
+      size: Math.random() * 6 + 3,
+      speedY: Math.random() * 0.8 + 0.3,
+      speedX: Math.random() * 0.6 - 0.3
     }));
 
     function animatePark() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Park fonu yaşıl qradient
       let bg = ctx.createLinearGradient(0, 0, 0, canvas.height);
       bg.addColorStop(0, "#064e3b");
       bg.addColorStop(1, "#022c22");
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Yarpaqların düşmə animasiyası
       ctx.fillStyle = "#22c55e";
       leaves.forEach(l => {
         ctx.beginPath();
