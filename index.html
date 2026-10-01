@@ -3,83 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Tap Clicker Game</title>
-    <!-- Telegram WebApp Kitbabs -->
+    <title>Crypto Clicker Pro - Battle & Earn</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        :root {
+            --bg-dark: #0f1015;
+            --bg-card: #1a1c29;
+            --accent: #f39c12;
+            --accent-glow: rgba(243, 156, 18, 0.4);
+            --text-main: #ffffff;
+            --text-secondary: #a0a5b8;
+            --green: #2ecc71;
+            --red: #e74c3c;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             user-select: none;
             -webkit-user-select: none;
-        }
-        body {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
             height: 100vh;
             height: 100dvh;
-            padding: 20px;
             overflow: hidden;
+            position: relative;
         }
-        .header {
+
+        /* Ana Ekran Konteynerləri */
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: calc(100% - 70px);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* Üst Balans Bölməsi */
+        .header-balance {
             text-align: center;
-            margin-top: 20px;
+            margin: 15px 0;
         }
-        .score-container {
-            font-size: 3.5rem;
-            font-weight: bold;
-            color: #f39c12;
-            text-shadow: 0 0 15px rgba(243, 156, 18, 0.4);
+
+        .balance-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
+        .balance-amount {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-shadow: 0 0 20px var(--accent-glow);
+            margin-top: 5px;
+        }
+
+        .profit-per-hour {
+            font-size: 0.85rem;
+            color: var(--green);
+            background: rgba(46, 204, 113, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 5px;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+        }
+
+        /* Klikləmə Sahəsi (Coin) */
+        .click-area-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            width: 100%;
+        }
+
         .coin-wrapper {
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-grow: 1;
         }
+
         .coin {
-            width: 230px;
-            height: 230px;
+            width: 240px;
+            height: 240px;
             background: radial-gradient(circle, #f1c40f, #d35400);
             border-radius: 50%;
-            box-shadow: 0 15px 35px rgba(241, 196, 15, 0.3), inset 0 0 25px rgba(255, 255, 255, 0.4);
+            box-shadow: 0 20px 40px rgba(241, 196, 15, 0.25), inset 0 0 30px rgba(255, 255, 255, 0.4);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 6rem;
+            font-size: 7rem;
             transition: transform 0.05s ease;
+            border: 5px solid #f39c12;
         }
+
         .coin:active {
-            transform: scale(0.92);
+            transform: scale(0.93);
         }
+
+        /* Enerji Şkalası */
         .energy-container {
             width: 100%;
-            max-width: 320px;
-            margin-bottom: 30px;
+            max-width: 340px;
+            margin-bottom: 15px;
         }
+
         .energy-info {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-            color: #bdc3c7;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
+
         .energy-bar-bg {
             width: 100%;
-            height: 16px;
-            background-color: #2c3e50;
-            border-radius: 8px;
+            height: 14px;
+            background-color: var(--bg-card);
+            border-radius: 7px;
             overflow: hidden;
-            border: 2px solid #34495e;
+            border: 1px solid #2c3e50;
         }
+
         .energy-bar-fill {
             width: 100%;
             height: 100%;
@@ -87,114 +152,470 @@
             border-radius: 6px;
             transition: width 0.1s linear;
         }
-        /* Basanda yuxarı qalxan +1 effekti */
+
+        /* Alt Naviqasiya Menyu Barı */
+        .nav-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: var(--bg-card);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #2c3e50;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.75rem;
+            flex-grow: 1;
+            transition: color 0.2s;
+        }
+
+        .nav-item span.icon {
+            font-size: 1.5rem;
+            margin-bottom: 3px;
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        /* Kartlar / Səviyyələr Dizaynı (Upgrades) */
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .upgrades-list, .friends-list, .leaderboard-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 20px;
+        }
+
+        .card-item {
+            background-color: var(--bg-card);
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #25283d;
+        }
+
+        .card-info h4 {
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+
+        .card-info p {
+            font-size: 0.8rem;
+            color: var(--green);
+        }
+
+        .card-btn {
+            background: linear-gradient(135deg, #f39c12, #d35400);
+            border: none;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: opacity 0.2s;
+        }
+
+        .card-btn:disabled {
+            background: #4a4e69;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Reytinq Cədvəli (Leaderboard) */
+        .leaderboard-item {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #25283d;
+        }
+
+        .rank-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .rank-number {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--accent);
+            width: 25px;
+        }
+
+        .rank-name {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .rank-score {
+            font-weight: bold;
+            color: var(--green);
+        }
+
+        /* Dost Dəvət Et (Friends) */
+        .invite-box {
+            background: linear-gradient(135deg, #2c3e50, #1a252f);
+            border-radius: 16px;
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #34495e;
+        }
+
+        .invite-box h3 {
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        .invite-box p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .invite-btn {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        /* Yuxarı qalxan +1 effekti */
         .floating-text {
             position: absolute;
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
-            color: #2ecc71;
+            color: var(--green);
             pointer-events: none;
             animation: floatUp 0.8s ease-out forwards;
-            text-shadow: 0 0 8px rgba(0,0,0,0.6);
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+            z-index: 50;
         }
+
         @keyframes floatUp {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-90px) scale(1.3);
-            }
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(1.3); }
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="score-container">
-            <span id="score">0</span>
+    <!-- 1. ƏSAS OYUN EKRANI (CLICKER) -->
+    <div id="screen-game" class="screen active">
+        <div class="header-balance">
+            <div class="balance-title">Ümumi Balans</div>
+            <div class="balance-amount" id="score">0</div>
+            <div class="profit-per-hour" id="profitPerHour">+0 coin / saat</div>
+        </div>
+
+        <div class="click-area-container" id="coinContainer">
+            <div class="coin-wrapper" id="coinWrapper">
+                <div class="coin" id="clickCoin">🪙</div>
+            </div>
+        </div>
+
+        <div class="energy-container">
+            <div class="energy-info">
+                <span>⚡ Enerji</span>
+                <span><span id="currentEnergy">1500</span> / <span id="maxEnergy">1500</span></span>
+            </div>
+            <div class="energy-bar-bg">
+                <div class="energy-bar-fill" id="energyFill"></div>
+            </div>
         </div>
     </div>
 
-    <div class="coin-wrapper" id="coinWrapper">
-        <div class="coin" id="clickCoin">🪙</div>
+    <!-- 2. SƏVİYYƏ VƏ KARTLAR EKRANI (UPGRADES) -->
+    <div id="screen-earn" class="screen">
+        <div class="header-balance">
+            <div class="balance-title">Passiv Gəlir Kartları</div>
+            <div class="balance-amount" id="scoreEarn">0</div>
+        </div>
+        <div class="section-title">Biznes və İnvestisiyalar</div>
+        <div class="upgrades-list" id="upgradesList">
+            <!-- JavaScript ilə dinamik dolacaq -->
+        </div>
     </div>
 
-    <div class="energy-container">
-        <div class="energy-info">
-            <span>⚡ Enerji</span>
-            <span><span id="currentEnergy">1000</span> / <span id="maxEnergy">1000</span></span>
+    <!-- 3. DOSTLAR EKRANI (FRIENDS) -->
+    <div id="screen-friends" class="screen">
+        <div class="invite-box">
+            <h3>Dostunu Dəvət Et! 🤝</h3>
+            <p>Hər dəvət etdiyiniz dost üçün ikiniz də 5,000 coin qazanırsınız!</p>
+            <button class="invite-btn" id="inviteBtn">Dost dəvət linkini paylaş</button>
         </div>
-        <div class="energy-bar-bg">
-            <div class="energy-bar-fill" id="energyFill"></div>
+        <div class="section-title">Dəvət Olunanlar (<span id="friendCount">0</span>)</div>
+        <div class="friends-list" id="friendsList">
+            <div style="text-align: center; color: var(--text-secondary); margin-top: 20px;">Hələ ki dəvət olunan yoxdur.</div>
         </div>
+    </div>
+
+    <!-- 4. REYTİNQ CƏDVƏLİ (LEADERBOARD) -->
+    <div id="screen-leaderboard" class="screen">
+        <div class="section-title">🏆 Qlobal Reytinq (Top Oyunçular)</div>
+        <div class="leaderboard-list" id="leaderboardList">
+            <!-- Dinamik doldurulacaq reytinq -->
+        </div>
+    </div>
+
+    <!-- ALT NAVİQASİYA BAR -->
+    <div class="nav-bar">
+        <button class="nav-item active" onclick="switchScreen('game', this)">
+            <span class="icon">🪙</span>
+            <span>Oyun</span>
+        </button>
+        <button class="nav-item" onclick="switchScreen('earn', this)">
+            <span class="icon">📈</span>
+            <span>İnvestisiya</span>
+        </button>
+        <button class="nav-item" onclick="switchScreen('friends', this)">
+            <span class="icon">👥</span>
+            <span>Dostlar</span>
+        </button>
+        <button class="nav-item" onclick="switchScreen('leaderboard', this)">
+            <span class="icon">🏆</span>
+            <span>Reytinq</span>
+        </button>
     </div>
 
     <script>
-        // Telegram WebApp-ı tam ekrana açmaq üçün
+        // Telegram WebApp Başlanğıc Ayarları
         const tg = window.Telegram?.WebApp;
         if (tg) {
             tg.expand();
         }
 
-        let score = 0;
-        let maxEnergy = 1000;
-        let energy = 1000;
-        let energyStep = 1;
+        // Oyunun Əsas Məlumatları (State)
+        let gameState = {
+            score: 0,
+            energy: 1500,
+            maxEnergy: 1500,
+            clickPower: 1,
+            profitPerHour: 0,
+            upgrades: [
+                { id: 1, name: "Telegram Kanalı", level: 0, cost: 100, profit: 10 },
+                { id: 2, name: "Kripto Birjası", level: 0, cost: 500, profit: 50 },
+                { id: 3, name: "NFT Kolleksiyası", level: 0, cost: 2000, profit: 200 },
+                { id: 4, name: "Süni İntellekt Botu", level: 0, cost: 10000, profit: 1000 }
+            ],
+            friends: []
+        };
 
-        const scoreElement = document.getElementById('score');
+        // Yaddaşdan məlumatları yükləmək
+        function loadGame() {
+            const saved = localStorage.getItem('crypto_clicker_save');
+            if (saved) {
+                try {
+                    gameState = JSON.parse(saved);
+                } catch (e) {
+                    console.error("Yaddaş xətası", e);
+                }
+            }
+        }
+
+        // Məlumatları yadda saxlamaq
+        function saveGame() {
+            localStorage.setItem('crypto_clicker_save', JSON.stringify(gameState));
+        }
+
+        // DOM Elementləri
+        const scoreEl = document.getElementById('score');
+        const scoreEarnEl = document.getElementById('scoreEarn');
         const clickCoin = document.getElementById('clickCoin');
-        const coinWrapper = document.getElementById('coinWrapper');
-        const currentEnergyElement = document.getElementById('currentEnergy');
+        const coinContainer = document.getElementById('coinContainer');
+        const currentEnergyEl = document.getElementById('currentEnergy');
+        const maxEnergyEl = document.getElementById('maxEnergy');
         const energyFill = document.getElementById('energyFill');
+        const profitPerHourEl = document.getElementById('profitPerHour');
+        const upgradesListEl = document.getElementById('upgradesList');
+        const friendsListEl = document.getElementById('friendsList');
+        const friendCountEl = document.getElementById('friendCount');
+        const leaderboardListEl = document.getElementById('leaderboardList');
+        const inviteBtn = document.getElementById('inviteBtn');
 
-        // Klikləmə / Toxunma hadisəsi
+        // Ekranlar arası keçid funksiyası
+        function switchScreen(screenName, btnElement) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            document.getElementById('screen-' + screenName).classList.add('active');
+            btnElement.classList.add('active');
+
+            if (screenName === 'leaderboard') {
+                renderLeaderboard();
+            } else if (screenName === 'earn') {
+                renderUpgrades();
+            }
+        }
+
+        // Klikləmə Hadisəsi
         clickCoin.addEventListener('pointerdown', (e) => {
-            if (energy < energyStep) return; // Enerji bitibsə basılmasın
+            if (gameState.energy < gameState.clickPower) return;
 
-            energy -= energyStep;
-            score += 1;
+            gameState.energy -= gameState.clickPower;
+            gameState.score += gameState.clickPower;
 
             updateUI();
             showFloatingText(e);
+            saveGame();
         });
 
-        function updateUI() {
-            scoreElement.textContent = score.toLocaleString();
-            currentEnergyElement.textContent = energy;
-            const percentage = (energy / maxEnergy) * 100;
-            energyFill.style.width = percentage + '%';
-        }
-
+        // Üzən +1 effekti
         function showFloatingText(e) {
             const rect = clickCoin.getBoundingClientRect();
-            // Toxunulan nöqtəni və ya mərkəzi təyin edirik
-            const x = e.clientX ? e.clientX - rect.left - 20 : rect.width / 2;
-            const y = e.clientY ? e.clientY - rect.top - 20 : rect.height / 2;
+            const x = e.clientX ? e.clientX - rect.left - 25 : rect.width / 2;
+            const y = e.clientY ? e.clientY - rect.top - 25 : rect.height / 2;
 
             const floatEl = document.createElement('div');
             floatEl.className = 'floating-text';
-            floatEl.textContent = '+' + energyStep;
+            floatEl.textContent = '+' + gameState.clickPower;
             floatEl.style.left = x + 'px';
             floatEl.style.top = y + 'px';
 
-            coinWrapper.appendChild(floatEl);
-
-            // Animasiya bitəndən sonra elementi silirik
-            setTimeout(() => {
-                floatEl.remove();
-            }, 800);
+            coinContainer.appendChild(floatEl);
+            setTimeout(() => floatEl.remove(), 800);
         }
 
-        // Hər saniyə enerji bərpası (3 vahid artır)
-        setInterval(() => {
-            if (energy < maxEnergy) {
-                energy = Math.min(maxEnergy, energy + 3);
+        // İnvestisiya Kartlarını Render etmək
+        function renderUpgrades() {
+            upgradesListEl.innerHTML = '';
+            gameState.upgrades.forEach(upg => {
+                const item = document.createElement('div');
+                item.className = 'card-item';
+                item.innerHTML = `
+                    <div class="card-info">
+                        <h4>${upg.name} (Səviyyə: ${upg.level})</h4>
+                        <p>+${upg.profit} coin/saat</p>
+                    </div>
+                    <button class="card-btn" ${gameState.score < upg.cost ? 'disabled' : ''} onclick="buyUpgrade(${upg.id})">
+                        ${upg.cost} 🪙
+                    </button>
+                `;
+                upgradesListEl.appendChild(item);
+            });
+        }
+
+        // Kart almaq funksiyası
+        window.buyUpgrade = function(id) {
+            const upg = gameState.upgrades.find(u => u.id === id);
+            if (gameState.score >= upg.cost) {
+                gameState.score -= upg.cost;
+                upg.level += 1;
+                gameState.profitPerHour += upg.profit;
+                upg.cost = Math.floor(upg.cost * 1.5); // Qiymət artır
+                
                 updateUI();
+                renderUpgrades();
+                saveGame();
             }
+        }
+
+        // Reytinq Cədvəlini Hazırlamaq (Saxta Rəqiblər + İstifadəçi)
+        function renderLeaderboard() {
+            const mockUsers = [
+                { name: "Elvin Məmmədov", score: 145200 },
+                { name: "Leyla Əliyeva", score: 98400 },
+                { name: "Orxan Quliyev", score: 76300 },
+                { name: "Anar Hüseynov", score: 54100 },
+                { name: "Səbinə Kərimova", score: 32000 }
+            ];
+
+            // İstifadəçini də əlavə edirik
+            mockUsers.push({ name: "Sən (Oyunçu)", score: gameState.score });
+            mockUsers.sort((a, b) => b.score - a.score);
+
+            leaderboardListEl.innerHTML = '';
+            mockUsers.forEach((usr, index) => {
+                const row = document.createElement('div');
+                row.className = 'leaderboard-item';
+                row.innerHTML = `
+                    <div class="rank-info">
+                        <span class="rank-number">#${index + 1}</span>
+                        <span class="rank-name">${usr.name}</span>
+                    </div>
+                    <span class="rank-score">${usr.score.toLocaleString()} 🪙</span>
+                `;
+                leaderboardListEl.appendChild(row);
+            });
+        }
+
+        // Dost Dəvət Et Düyməsi
+        inviteBtn.addEventListener('click', () => {
+            const botUsername = "SeninBotun_bot"; // Öz botunun adını bura yazarsan
+            const inviteLink = `https://t.me/${botUsername}?start=r_${Math.floor(Math.random() * 1000000)}`;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(inviteLink);
+                alert("Dəvət linki kopyalandı! Dostlarına göndər.");
+            } else {
+                prompt("Dəvət linkiniz:", inviteLink);
+            }
+        });
+
+        // UI Yenilənməsi
+        function updateUI() {
+            scoreEl.textContent = gameState.score.toLocaleString();
+            scoreEarnEl.textContent = gameState.score.toLocaleString();
+            currentEnergyEl.textContent = gameState.energy;
+            maxEnergyEl.textContent = gameState.maxEnergy;
+            profitPerHourEl.textContent = `+${gameState.profitPerHour} coin / saat`;
+            
+            const percentage = (gameState.energy / gameState.maxEnergy) * 100;
+            energyFill.style.width = percentage + '%';
+        }
+
+        // Hər saniyə enerji bərpası və Passiv gəlir hesablanması
+        setInterval(() => {
+            // Enerji bərpası (hər saniyə +5)
+            if (gameState.energy < gameState.maxEnergy) {
+                gameState.energy = Math.min(gameState.maxEnergy, gameState.energy + 5);
+            }
+
+            // Saatlıq gəlirin saniyəlik hissəsini balansa əlavə etmək
+            if (gameState.profitPerHour > 0) {
+                gameState.score += gameState.profitPerHour / 3600;
+            }
+
+            updateUI();
+            saveGame();
         }, 1000);
+
+        // Oyunu işə sal
+        loadGame();
+        updateUI();
     </script>
 </body>
 </html>
-
