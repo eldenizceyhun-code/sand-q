@@ -3,121 +3,178 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Varımdı-Lazımdı</title>
-<meta name="description" content="Nə axtarırsan? Bəlkə də kimdəsə var. Varımdı-Lazımdı — alıcıları və satıcıları ağıllı şəkildə uyğunlaşdıran marketplace.">
+<title>VARLAZ | Ağıllı Marketplace</title>
+<meta name="description" content="Nə axtarırsan? Bəlkə də kimdəsə var. VARLAZ — alıcıları və satıcıları birləşdirən premium ekosistem.">
 <style>
-:root{
-  --bg:#07111f; --bg2:#0b1830; --card:rgba(15,29,51,.78); --card2:#10213a;
-  --text:#f7f9fc; --muted:#91a0b7; --line:rgba(255,255,255,.09);
-  --primary:#7c5cff; --primary2:#20d4ff; --green:#35e0a1; --danger:#ff667d;
-  --shadow:0 24px 80px rgba(0,0,0,.28); --radius:24px;
+:root {
+  --bg: #050914; --bg2: #0a1122; --card: rgba(13, 22, 43, 0.6); --card-hover: rgba(18, 30, 56, 0.8);
+  --text: #f7f9fc; --muted: #8b9bb4; --line: rgba(255, 255, 255, 0.08);
+  --primary: #7c5cff; --primary2: #20d4ff; --green: #35e0a1; --danger: #ff667d;
+  --shadow: 0 24px 80px rgba(0,0,0,0.4); --radius: 20px;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:
-radial-gradient(circle at 10% 10%,rgba(124,92,255,.20),transparent 30%),
-radial-gradient(circle at 85% 18%,rgba(32,212,255,.13),transparent 28%),
-linear-gradient(145deg,#06101d,#0a172a 55%,#07111f);min-height:100vh}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-a{text-decoration:none;color:inherit}
-.container{width:min(1180px,calc(100% - 36px));margin:auto}
-header{position:sticky;top:0;z-index:50;background:rgba(7,17,31,.72);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
-.nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.logo{font-weight:900;font-size:22px;letter-spacing:-0.5px;display:flex;align-items:center;gap:10px}
-.logoMark{width:42px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary2));display:grid;place-items:center;box-shadow:0 10px 30px rgba(124,92,255,.28);font-size: 14px;}
-.navlinks{display:flex;gap:8px;align-items:center}
-.navlinks button,.ghost{border:0;background:transparent;color:#cbd5e4;padding:11px 14px;border-radius:12px}
-.navlinks button:hover,.ghost:hover{background:rgba(255,255,255,.06);color:#fff}
-.btn{border:0;border-radius:13px;padding:12px 17px;color:white;font-weight:750;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.btn:hover{transform:translateY(-2px)}
-.btn.primary{background:linear-gradient(135deg,var(--primary),#5e7cff);box-shadow:0 12px 28px rgba(124,92,255,.24)}
-.btn.secondary{background:linear-gradient(135deg,#13bfa3,#22d4ff);color:#03131b}
-.btn.dark{background:rgba(255,255,255,.07);border:1px solid var(--line)}
-.btn.full{width:100%}
-.hero{padding:82px 0 58px;position:relative;overflow:hidden}
-.heroGrid{display:grid;grid-template-columns:1.08fr .92fr;gap:50px;align-items:center}
-.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(124,92,255,.35);background:rgba(124,92,255,.10);color:#cfc7ff;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:700}
-.dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 14px var(--green)}
-h1{font-size:clamp(44px,6vw,76px);line-height:.98;letter-spacing:-4px;margin:20px 0}
-.gradient{background:linear-gradient(110deg,#fff 10%,#9c8cff 48%,#48ddff);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{font-size:18px;line-height:1.7;color:var(--muted);max-width:640px}
-.heroActions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
-.trust{display:flex;gap:24px;margin-top:28px;color:#718199;font-size:13px;flex-wrap:wrap}
-.mock{border:1px solid var(--line);background:linear-gradient(180deg,rgba(20,37,64,.88),rgba(8,19,34,.9));border-radius:28px;padding:16px;box-shadow:var(--shadow);transform:rotate(1deg)}
-.window{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#091526}
-.windowTop{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;gap:7px}
-.ball{width:9px;height:9px;border-radius:50%;background:#33445e}
-.mockBody{padding:18px}
-.mockSearch{height:46px;border:1px solid var(--line);background:#101f34;border-radius:12px;display:flex;align-items:center;padding:0 14px;color:#72829a}
-.mockStats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.stat{background:rgba(255,255,255,.04);border:1px solid var(--line);padding:15px;border-radius:15px}
-.stat strong{font-size:24px;display:block}.stat span{font-size:12px;color:var(--muted)}
-.match{margin-top:12px;padding:15px;border-radius:16px;background:linear-gradient(120deg,rgba(124,92,255,.16),rgba(32,212,255,.08));border:1px solid rgba(124,92,255,.2)}
-.matchTop{display:flex;justify-content:space-between;gap:10px}.pill{font-size:11px;padding:5px 8px;border-radius:999px;background:rgba(53,224,161,.12);color:#62efba}
-section{padding:70px 0}
-.sectionHead{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:28px}
-.eyebrow{color:#8f82ff;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px}
-h2{font-size:40px;letter-spacing:-2px;margin:8px 0}.sub{color:var(--muted);line-height:1.6}
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.card{border:1px solid var(--line);background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:0 15px 45px rgba(0,0,0,.12)}
-.icon{width:45px;height:45px;border-radius:14px;display:grid;place-items:center;background:rgba(124,92,255,.13);font-size:21px;margin-bottom:18px}
-.card h3{margin:0 0 9px;font-size:18px}.card p{margin:0;color:var(--muted);line-height:1.6}
-.market{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.marketCard{padding:30px;border-radius:26px;border:1px solid var(--line);background:linear-gradient(145deg,rgba(124,92,255,.11),rgba(255,255,255,.025))}
-.marketCard.need{background:linear-gradient(145deg,rgba(32,212,255,.09),rgba(255,255,255,.025))}
-.marketCard h3{font-size:25px;margin:0 0 8px}.marketCard p{color:var(--muted)}
-.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}
-label{font-size:13px;color:#aebbd0;font-weight:650}
-input,select,textarea{width:100%;border:1px solid var(--line);background:#09182b;color:white;border-radius:13px;padding:13px 14px;outline:none}
-input:focus,select:focus,textarea:focus{border-color:rgba(124,92,255,.65);box-shadow:0 0 0 3px rgba(124,92,255,.09)}
-textarea{min-height:110px;resize:vertical}
-.listings{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.listing{overflow:hidden;padding:0}.listingTop{height:150px;background:linear-gradient(135deg,#1a2d4a,#17203a);display:grid;place-items:center;font-size:50px}.listingBody{padding:20px}.listingBody h3{margin:0 0 7px}.meta{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:12px}.price{font-size:22px;font-weight:850;margin:15px 0}.listingFoot{display:flex;justify-content:space-between;align-items:center}
-.empty{text-align:center;padding:45px;color:var(--muted);border:1px dashed var(--line);border-radius:20px;grid-column:1/-1}
-.cta{padding:45px;border:1px solid rgba(124,92,255,.25);border-radius:30px;background:radial-gradient(circle at 85% 20%,rgba(32,212,255,.14),transparent 30%),linear-gradient(135deg,rgba(124,92,255,.15),rgba(255,255,255,.025));display:flex;align-items:center;justify-content:space-between;gap:30px}
-footer{padding:35px 0 50px;color:#69788e;border-top:1px solid var(--line);font-size:13px}
-.footerFlex{display:flex;justify-content:space-between;gap:20px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.68);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}
-.modal.show{display:flex}.modalBox{width:min(560px,100%);max-height:90vh;overflow:auto;background:#0b192c;border:1px solid var(--line);border-radius:25px;padding:26px;box-shadow:var(--shadow)}
-.modalHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.close{border:0;background:rgba(255,255,255,.06);color:white;border-radius:10px;width:36px;height:36px}
-.tabs{display:flex;background:#071321;padding:4px;border-radius:13px;margin-bottom:18px}.tab{flex:1;border:0;background:transparent;color:#8291a8;padding:10px;border-radius:10px}.tab.active{background:#162640;color:#fff}
-.notice{padding:12px 14px;border-radius:12px;margin:10px 0;font-size:13px;display:none}.notice.ok{display:block;background:rgba(53,224,161,.1);color:#72e9bd}.notice.err{display:block;background:rgba(255,102,125,.1);color:#ff899a}
-.userMenu{display:none;align-items:center;gap:8px}.avatar{width:35px;height:35px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--primary),var(--primary2));font-weight:800}
-.mobile{display:none}
-.toast{position:fixed;right:20px;bottom:20px;background:#10233c;border:1px solid var(--line);padding:14px 18px;border-radius:14px;box-shadow:var(--shadow);z-index:200;transform:translateY(130px);transition:.3s}.toast.show{transform:translateY(0)}
-@media(max-width:850px){
- .heroGrid,.market{grid-template-columns:1fr}.features,.listings{grid-template-columns:1fr 1fr}.navlinks{display:none}.mobile{display:block}
- .hero{padding-top:50px}.mock{transform:none} h1{letter-spacing:-2.5px}.cta{flex-direction:column;align-items:flex-start}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; font-family: Inter, system-ui, -apple-system, sans-serif;
+  color: var(--text); background-color: var(--bg); min-height: 100vh;
+  overflow-x: hidden; position: relative;
 }
-@media(max-width:560px){
- .container{width:min(100% - 24px,1180px)}.features,.listings,.formGrid{grid-template-columns:1fr}.field.full{grid-column:auto}
- .heroActions .btn{width:100%}.sectionHead{display:block}.nav{height:68px}.logo{font-size:20px}
- h2{font-size:32px}.footerFlex{display:block}.footerFlex>*{margin-bottom:10px}
+/* Dinamik Arxa Plan */
+.bg-orbs { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; pointer-events: none; }
+.orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.4; animation: floatOrb 20s infinite ease-in-out alternate; }
+.orb-1 { width: 400px; height: 400px; background: var(--primary); top: -10%; left: -10%; }
+.orb-2 { width: 500px; height: 500px; background: var(--primary2); bottom: -20%; right: -10%; animation-delay: -5s; }
+.orb-3 { width: 300px; height: 300px; background: #4a25e1; top: 40%; left: 60%; animation-delay: -10s; }
+@keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
+
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+a { text-decoration: none; color: inherit; }
+.container { width: min(1200px, calc(100% - 40px)); margin: auto; }
+
+/* Header & Nav */
+header { position: sticky; top: 0; z-index: 50; background: rgba(5, 9, 20, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--line); }
+.nav { height: 80px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.logo { font-weight: 900; font-size: 26px; letter-spacing: -1px; display: flex; align-items: center; gap: 10px; transition: transform 0.3s; }
+.logo:hover { transform: scale(1.02); }
+.logo span { color: var(--primary); }
+.navlinks { display: flex; gap: 10px; align-items: center; }
+.navlinks button, .ghost { border: 0; background: transparent; color: #a4b3c6; padding: 10px 16px; border-radius: 12px; font-weight: 500; transition: 0.3s; }
+.navlinks button:hover, .ghost:hover { background: rgba(255,255,255,0.06); color: #fff; }
+
+/* Buttons */
+.btn { border: 0; border-radius: 14px; padding: 14px 22px; color: white; font-weight: 700; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+.btn:active { transform: translateY(0); }
+.btn.primary { background: linear-gradient(135deg, var(--primary), #5e7cff); box-shadow: 0 12px 28px rgba(124,92,255,0.3); }
+.btn.secondary { background: linear-gradient(135deg, #13bfa3, #22d4ff); color: #03131b; box-shadow: 0 12px 28px rgba(34,212,255,0.2); }
+.btn.dark { background: rgba(255,255,255,0.05); border: 1px solid var(--line); backdrop-filter: blur(10px); }
+.btn.dark:hover { background: rgba(255,255,255,0.1); }
+.btn.full { width: 100%; }
+
+/* Layout & Hero */
+section { padding: 90px 0; scroll-margin-top: 80px; } /* scroll-margin-top sürüşməni tənzimləyir */
+.hero { padding: 100px 0 70px; position: relative; }
+.heroGrid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
+.badge { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(124,92,255,0.4); background: rgba(124,92,255,0.15); color: #e0d9ff; padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; backdrop-filter: blur(5px); }
+.dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 15px var(--green); }
+h1 { font-size: clamp(48px, 6vw, 82px); line-height: 1.05; letter-spacing: -3px; margin: 24px 0; font-weight: 800; }
+.gradient { background: linear-gradient(110deg, #fff 20%, #a79cff 60%, #48ddff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero p { font-size: 19px; line-height: 1.6; color: var(--muted); max-width: 580px; font-weight: 400; }
+.heroActions { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 35px; }
+
+/* Mockup Window */
+.mock { border: 1px solid var(--line); background: linear-gradient(180deg, rgba(15,22,40,0.8), rgba(8,12,24,0.9)); border-radius: 28px; padding: 16px; box-shadow: var(--shadow); transform: perspective(1000px) rotateY(-5deg) rotateX(2deg); transition: transform 0.5s ease; backdrop-filter: blur(20px); }
+.mock:hover { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
+.window { border: 1px solid var(--line); border-radius: 20px; overflow: hidden; background: #070c17; }
+.windowTop { padding: 14px 18px; border-bottom: 1px solid var(--line); display: flex; gap: 8px; background: #0a1122; }
+.ball { width: 11px; height: 11px; border-radius: 50%; background: #33445e; }
+.ball:nth-child(1) { background: #ff5f56; } .ball:nth-child(2) { background: #ffbd2e; } .ball:nth-child(3) { background: #27c93f; }
+.mockBody { padding: 22px; }
+.stat { background: rgba(255,255,255,0.03); border: 1px solid var(--line); padding: 16px; border-radius: 16px; }
+
+/* Sections */
+.sectionHead { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 40px; }
+.eyebrow { color: #8f82ff; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
+h2 { font-size: 42px; letter-spacing: -1.5px; margin: 10px 0; }
+.sub { color: var(--muted); line-height: 1.6; font-size: 16px; }
+
+/* Cards & Grid */
+.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.card { border: 1px solid var(--line); background: var(--card); border-radius: var(--radius); padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); backdrop-filter: blur(10px); transition: 0.3s; }
+.card:hover { transform: translateY(-5px); background: var(--card-hover); border-color: rgba(124,92,255,0.3); }
+.icon { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; background: linear-gradient(135deg, rgba(124,92,255,0.2), rgba(32,212,255,0.1)); font-size: 24px; margin-bottom: 22px; border: 1px solid rgba(124,92,255,0.1); }
+.market { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.marketCard { padding: 35px; border-radius: 28px; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(124,92,255,0.08), rgba(255,255,255,0.01)); backdrop-filter: blur(15px); }
+.marketCard.need { background: linear-gradient(145deg, rgba(32,212,255,0.08), rgba(255,255,255,0.01)); }
+
+/* Forms & Inputs */
+.formGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field.full { grid-column: 1 / -1; }
+label { font-size: 14px; color: #aebbd0; font-weight: 600; }
+input, select, textarea { width: 100%; border: 1px solid var(--line); background: rgba(0,0,0,0.2); color: white; border-radius: 14px; padding: 15px 18px; outline: none; transition: 0.3s; font-size: 15px; }
+input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(124,92,255,0.15); background: rgba(0,0,0,0.4); }
+textarea { min-height: 120px; resize: vertical; }
+
+/* Custom File Upload */
+.file-upload { border: 2px dashed rgba(124,92,255,0.4); border-radius: 14px; padding: 20px; text-align: center; background: rgba(124,92,255,0.05); cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+.file-upload:hover { background: rgba(124,92,255,0.1); border-color: var(--primary); }
+.file-upload img.preview { max-height: 150px; border-radius: 8px; display: none; object-fit: cover; }
+.file-upload.has-image .upload-text { display: none; }
+.file-upload.has-image img.preview { display: block; }
+
+/* Listings Grid */
+.listings { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+.listing { overflow: hidden; padding: 0; display: flex; flex-direction: column; }
+.listingTop { height: 200px; background: linear-gradient(135deg, #152238, #0e1626); display: grid; place-items: center; font-size: 60px; background-size: cover !important; background-position: center !important; position: relative; }
+.listingBody { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
+.listingBody h3 { margin: 0 0 10px; font-size: 20px; }
+.meta { display: flex; gap: 10px; flex-wrap: wrap; color: var(--muted); font-size: 13px; font-weight: 500; }
+.price { font-size: 26px; font-weight: 800; margin: 18px 0; color: #fff; }
+.listingFoot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 20px; border-top: 1px solid var(--line); }
+
+/* Modals */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 100; opacity: 0; transition: opacity 0.3s ease; }
+.modal.show { display: flex; opacity: 1; }
+.modalBox { width: min(600px, 100%); max-height: 90vh; overflow-y: auto; background: #0a1122; border: 1px solid var(--line); border-radius: 28px; padding: 32px; box-shadow: var(--shadow); transform: translateY(20px); transition: 0.3s; }
+.modal.show .modalBox { transform: translateY(0); }
+.modalHead { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
+.close { border: 0; background: rgba(255,255,255,0.05); color: white; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; transition: 0.2s; }
+.close:hover { background: rgba(255,255,255,0.15); transform: rotate(90deg); }
+
+/* Toasts */
+.toast { position: fixed; right: 24px; bottom: 24px; background: rgba(13, 22, 43, 0.95); border: 1px solid rgba(124,92,255,0.3); backdrop-filter: blur(10px); padding: 16px 24px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 200; transform: translateY(150px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; gap: 12px; font-weight: 500; }
+.toast.show { transform: translateY(0); }
+
+@media(max-width: 850px) {
+  .heroGrid, .market { grid-template-columns: 1fr; }
+  .hero { text-align: center; padding-top: 60px; }
+  .hero p { margin: 0 auto; }
+  .heroActions { justify-content: center; }
+  .trust { justify-content: center; }
+  .mock { transform: none; margin-top: 20px; }
+  .navlinks { display: none; }
 }
 </style>
 </head>
 <body>
 
+<!-- Animated Background -->
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
 <header>
   <div class="container nav">
-    <a class="logo" href="#home"><span class="logoMark">V-L</span> Varımdı-Lazımdı</a>
+    <a class="logo" href="#home">
+      <!-- Premium SVG Logo -->
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#gradLogo)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <defs>
+          <linearGradient id="gradLogo" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#7c5cff;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#20d4ff;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+      </svg>
+      VAR<span>LAZ</span>
+    </a>
     <nav class="navlinks">
-      <button onclick="go('home')">Ana səhifə</button>
-      <button onclick="go('market')">Elanlar</button>
-      <button onclick="go('how')">Necə işləyir?</button>
-      <button onclick="openPost()">Elan yerləşdir</button>
+      <button onclick="go('home')">Kəşf Et</button>
+      <button onclick="go('how')">Konsept</button>
+      <button onclick="go('market')">Market</button>
+      <button onclick="go('explore')">Kataloq</button>
     </nav>
     <div id="guestNav">
-      <button class="btn dark" onclick="openAuth('login')">Daxil ol</button>
+      <button class="btn dark" onclick="openAuth('login')">Giriş</button>
       <button class="btn primary" onclick="openAuth('register')">Qeydiyyat</button>
     </div>
-    <div id="userNav" class="userMenu">
-      <button class="btn dark" onclick="openPost()">+ Elan</button>
-      <div class="avatar" id="avatar">V</div>
-      <button class="ghost" onclick="openProfile()">Profil</button>
-      <button class="ghost" onclick="logout()">Çıxış</button>
+    <div id="userNav" style="display:none; align-items:center; gap:10px;">
+      <button class="btn primary" onclick="openPost()">+ Yeni Elan</button>
+      <div id="avatar" style="width:40px; height:40px; border-radius:50%; background: linear-gradient(135deg, var(--primary), var(--primary2)); display: grid; place-items: center; font-weight: 800; font-size:18px; cursor:pointer;" onclick="openProfile()">V</div>
     </div>
   </div>
 </header>
@@ -126,33 +183,34 @@ footer{padding:35px 0 50px;color:#69788e;border-top:1px solid var(--line);font-s
 <section class="hero">
   <div class="container heroGrid">
     <div>
-      <span class="badge"><span class="dot"></span> Yeni nəsil lokal marketplace</span>
-      <h1>Lazımdı?<br><span class="gradient">Bəlkə də məndə var.</span></h1>
-      <p>İnsanların axtardığı məhsulları onları satan insanlarla birbaşa uyğunlaşdırırıq. Sən nə axtarırsansa yaz. Kimsə onu satırsa, <b>Varımdı-Lazımdı</b> səni xəbərdar edir.</p>
+      <span class="badge"><span class="dot"></span> Silikon Vadisi standartında</span>
+      <h1>Lazımdı?<br><span class="gradient">VARLAZ-da var.</span></h1>
+      <p>Sən sadəcə nə axtardığını yaz. Bizim süni intellekt dəstəkli alqoritmimiz onu kimin satdığını tapıb anında səni xəbərdar edir. Gələcəyin ticarəti budur.</p>
       <div class="heroActions">
-        <button class="btn primary" onclick="openNeed()">🔎 Nə isə axtarıram</button>
+        <button class="btn primary" onclick="openNeed()">🔎 Mənə lazımdır</button>
         <button class="btn secondary" onclick="openPost()">＋ Məndə var</button>
       </div>
       <div class="trust">
-        <span>✓ Pulsuz başla</span><span>✓ Komissiyasız əlaqə</span><span>✓ Lokal elanlar</span>
+        <span>✓ Tam ödənişsiz</span><span>✓ 0% Komissiya</span><span>✓ Premium təcrübə</span>
       </div>
     </div>
     <div class="mock">
       <div class="window">
         <div class="windowTop"><span class="ball"></span><span class="ball"></span><span class="ball"></span></div>
         <div class="mockBody">
-          <div class="mockSearch">⌕ &nbsp; “MacBook”, “BMW”, “PlayStation...”</div>
-          <div class="mockStats">
-            <div class="stat"><strong id="heroNeedCount">128</strong><span>Aktiv axtarış</span></div>
-            <div class="stat"><strong id="heroHaveCount">342</strong><span>Aktiv məhsul</span></div>
+          <div style="height:46px; border:1px solid rgba(255,255,255,0.1); background:#0c1424; border-radius:12px; display:flex; align-items:center; padding:0 16px; color:#72829a; font-size:14px;">
+            ⌕ &nbsp; Ağıllı Axtarış: "iPhone 15 Pro", "Masa"...
           </div>
-          <div class="match">
-            <div class="matchTop"><b>⚡ MATCH TAPILDI</b><span class="pill">96% uyğun</span></div>
-            <p style="color:#b7c3d5;margin:10px 0 0;font-size:13px">“MacBook Pro M3, €1200-a qədər” axtaran alıcı üçün uyğun elan tapıldı.</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px;">
+            <div class="stat"><strong id="heroNeedCount" style="font-size:28px">128</strong><span style="color:#8b9bb4">Gözləyən alıcı</span></div>
+            <div class="stat"><strong id="heroHaveCount" style="font-size:28px">342</strong><span style="color:#8b9bb4">Hazır məhsul</span></div>
           </div>
-          <div class="match" style="background:rgba(255,255,255,.035)">
-            <b>📍 Baku · €1,050</b>
-            <p style="color:#718199;margin:7px 0 0;font-size:12px">MacBook Pro 14” · M3 · 16GB</p>
+          <div style="margin-top:16px; padding:18px; border-radius:16px; background:linear-gradient(120deg, rgba(124,92,255,0.2), rgba(32,212,255,0.1)); border:1px solid rgba(124,92,255,0.3);">
+            <div style="display:flex; justify-content:space-between; gap:10px;">
+              <b style="color:#fff;">⚡ İDEAL UYĞUNLUQ</b>
+              <span style="font-size:11px; padding:4px 8px; border-radius:999px; background:rgba(53,224,161,0.15); color:#35e0a1;">98% Match</span>
+            </div>
+            <p style="color:#b7c3d5; margin:12px 0 0; font-size:13.5px;">Sizin axtardığınız “MacBook Pro M3” üçün ideal satıcı tapıldı.</p>
           </div>
         </div>
       </div>
@@ -162,82 +220,115 @@ footer{padding:35px 0 50px;color:#69788e;border-top:1px solid var(--line);font-s
 
 <section id="how">
 <div class="container">
-  <div class="sectionHead"><div><div class="eyebrow">Sadə sistem</div><h2>İki düymə. Bir uyğunlaşma.</h2></div><p class="sub" style="max-width:420px">Elan saytlarında məhsul axtarmaq əvəzinə əvvəlcə real tələbi gör.</p></div>
+  <div class="sectionHead"><div><div class="eyebrow">Alqoritm necə işləyir?</div><h2>İki addım. Mükəmməl nəticə.</h2></div><p class="sub" style="max-width:460px">Köhnə elan saytlarında saatlarla axtarış etməyi unudun. VARLAZ tələb və təklifi avtomatik birləşdirir.</p></div>
   <div class="features">
-    <div class="card"><div class="icon">🔎</div><h3>1. Nə lazımdır?</h3><p>Axtardığın məhsulu, maksimum qiyməti və şəhəri yaz. Sistem onu axtaranlar siyahısına əlavə edir.</p></div>
-    <div class="card"><div class="icon">📦</div><h3>2. Məndə var</h3><p>Səndə olan məhsulu yerləşdir. Sistem uyğun axtarışları taparaq məhsulunu doğru insanlara göstərir.</p></div>
-    <div class="card"><div class="icon">⚡</div><h3>3. Match</h3><p>Qiymət, kateqoriya və şəhər uyğun gələndə tərəflər bir-biri ilə əlaqə saxlaya bilir.</p></div>
+    <div class="card"><div class="icon">🔎</div><h3>1. Tələb yarat</h3><p>Axtardığın məhsulu və büdcəni yaz. Sistem səni gözləmə otağına deyil, birbaşa hədəfə aparır.</p></div>
+    <div class="card"><div class="icon">📦</div><h3>2. Təklif et</h3><p>Səndə olan məhsulu yüklə. VARLAZ anında o məhsulu hazırda axtaran şəxsləri sənə göstərir.</p></div>
+    <div class="card"><div class="icon">⚡</div><h3>3. Avto-Match</h3><p>Parametrlər üst-üstə düşdüyü an, hər iki tərəfə bildiriş gedir və alış-veriş prosesi başlayır.</p></div>
   </div>
 </div>
 </section>
 
 <section id="market">
 <div class="container">
-  <div class="sectionHead"><div><div class="eyebrow">Marketplace</div><h2>İndi nə axtarılır?</h2></div><button class="btn dark" onclick="renderListings()">↻ Yenilə</button></div>
+  <div class="sectionHead"><div><div class="eyebrow">Canlı Bazar</div><h2>Bazarın Nəbzi</h2></div><button class="btn dark" onclick="renderListings()">↻ Yenilə</button></div>
   <div class="market">
-    <div class="marketCard need"><h3>🔎 İnsanlar bunu axtarır</h3><p>Satıcıların görməsi üçün real tələblər.</p><div id="needList"></div></div>
-    <div class="marketCard"><h3>📦 İnsanlarda bunlar var</h3><p>Hazırda yerləşdirilən məhsullar.</p><div id="haveMiniList"></div></div>
+    <div class="marketCard need">
+      <h3 style="display:flex; align-items:center; gap:10px;">🔎 Canlı Tələblər</h3>
+      <p>Hal-hazırda alıcıların axtardığı məhsullar.</p>
+      <div id="needList" style="margin-top:20px;"></div>
+    </div>
+    <div class="marketCard">
+      <h3 style="display:flex; align-items:center; gap:10px;">📦 Son Yüklənənlər</h3>
+      <p>Satıcıların yenicə platformaya əlavə etdikləri.</p>
+      <div id="haveMiniList" style="margin-top:20px;"></div>
+    </div>
   </div>
 </div>
 </section>
 
 <section id="explore">
 <div class="container">
-  <div class="sectionHead"><div><div class="eyebrow">Son elanlar</div><h2>Tapılanlar</h2></div><div style="display:flex;gap:8px"><select id="filterCat" onchange="renderListings()" style="width:auto"><option value="">Bütün kateqoriyalar</option><option>Elektronika</option><option>Avtomobil</option><option>Ev</option><option>Geyim</option><option>Digər</option></select></div></div>
+  <div class="sectionHead"><div><div class="eyebrow">Kataloq</div><h2>Kəşf Et</h2></div><div style="display:flex; gap:12px;">
+    <select id="filterCat" onchange="renderListings()" style="width:auto; background:rgba(255,255,255,0.05); backdrop-filter:blur(10px);">
+      <option value="">Bütün kateqoriyalar</option>
+      <option>Elektronika</option>
+      <option>Avtomobil</option>
+      <option>Ev & Dekor</option>
+      <option>Moda</option>
+      <option>Digər</option>
+    </select>
+  </div></div>
   <div id="listings" class="listings"></div>
-</div>
-</section>
-
-<section>
-<div class="container">
-  <div class="cta">
-    <div><div class="eyebrow">Sənin növbəndir</div><h2 style="margin-bottom:5px">Axtardığını yaz.</h2><p class="sub">Bəlkə də kimsə çoxdan onu satmaq istəyir.</p></div>
-    <button class="btn primary" onclick="openNeed()">🔎 Axtarış yarat</button>
-  </div>
 </div>
 </section>
 </main>
 
-<footer>
-<div class="container footerFlex"><div><b style="color:#fff">Varımdı-Lazımdı</b> — Nə axtarırsan?</div><div>© 2026 Varımdı-Lazımdı.</div><div><button class="ghost" onclick="showToast('Məxfilik səhifəsi tezliklə aktiv olacaq.')">Məxfilik</button><button class="ghost" onclick="showToast('Dəstək: salam@varimdilazimdi.az')">Dəstək</button></div></div>
+<footer style="padding:40px 0 60px; border-top:1px solid var(--line); color:#69788e; font-size:14px; background:rgba(0,0,0,0.2);">
+<div class="container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
+  <div><b style="color:#fff; font-size:18px;">VARLAZ</b> — Yeni nəsil e-ticarət.</div>
+  <div>© 2026 VARLAZ Technologies. Bütün hüquqlar qorunur.</div>
+  <div style="display:flex; gap:15px;">
+    <button class="ghost" onclick="showToast('Məxfilik siyasəti hazırlanır.')">Məxfilik</button>
+    <button class="ghost" onclick="showToast('Dəstək üçün: hello@varlaz.ai')">Dəstək: hello@varlaz.ai</button>
+  </div>
+</div>
 </footer>
 
 <!-- AUTH MODAL -->
 <div class="modal" id="authModal">
 <div class="modalBox">
- <div class="modalHead"><div><h2 style="font-size:27px;margin:0">Xoş gəldin</h2><p class="sub" style="margin:5px 0">Alıcı ol, satıcı ol. Hər ikisi pulsuz.</p></div><button class="close" onclick="closeModal('authModal')">×</button></div>
- <div class="tabs"><button id="loginTab" class="tab active" onclick="switchAuth('login')">Daxil ol</button><button id="registerTab" class="tab" onclick="switchAuth('register')">Qeydiyyat</button></div>
- <div id="authNotice" class="notice"></div>
+ <div class="modalHead">
+   <div><h2 style="font-size:32px; margin:0; letter-spacing:-1px;">VARLAZ-a Keçid</h2><p class="sub" style="margin:8px 0">Ekosistemə daxil ol.</p></div>
+   <button class="close" onclick="closeModal('authModal')">×</button>
+ </div>
+ <div style="display:flex; background:rgba(255,255,255,0.05); padding:5px; border-radius:14px; margin-bottom:24px;">
+   <button id="loginTab" style="flex:1; border:0; background:rgba(255,255,255,0.1); color:#fff; padding:12px; border-radius:10px; font-weight:600;" onclick="switchAuth('login')">Giriş</button>
+   <button id="registerTab" style="flex:1; border:0; background:transparent; color:#8b9bb4; padding:12px; border-radius:10px; font-weight:600;" onclick="switchAuth('register')">Qeydiyyat</button>
+ </div>
  <form id="loginForm" onsubmit="login(event)">
-   <div class="field"><label>E-poçt</label><input id="loginEmail" type="email" required placeholder="sən@mail.com"></div>
-   <div class="field" style="margin-top:13px"><label>Şifrə</label><input id="loginPass" type="password" required placeholder="••••••••"></div>
-   <button class="btn primary full" style="margin-top:18px">Daxil ol</button>
+   <div class="field"><label>E-poçt ünvanı</label><input id="loginEmail" type="email" required placeholder="name@example.com"></div>
+   <div class="field" style="margin-top:16px"><label>Şifrə</label><input id="loginPass" type="password" required placeholder="••••••••"></div>
+   <button class="btn primary full" style="margin-top:24px; font-size:16px;">Sistemə Daxil Ol</button>
  </form>
  <form id="registerForm" style="display:none" onsubmit="register(event)">
-   <div class="field"><label>Ad</label><input id="regName" required placeholder="Məsələn, Orxan"></div>
-   <div class="field" style="margin-top:13px"><label>E-poçt</label><input id="regEmail" type="email" required placeholder="sən@mail.com"></div>
-   <div class="field" style="margin-top:13px"><label>Şifrə</label><input id="regPass" type="password" minlength="6" required placeholder="Minimum 6 simvol"></div>
-   <button class="btn primary full" style="margin-top:18px">Hesab yarat</button>
+   <div class="field"><label>Tam Ad</label><input id="regName" required placeholder="Məsələn, Aqil Quliyev"></div>
+   <div class="field" style="margin-top:16px"><label>E-poçt</label><input id="regEmail" type="email" required placeholder="name@example.com"></div>
+   <div class="field" style="margin-top:16px"><label>Şifrə</label><input id="regPass" type="password" minlength="6" required placeholder="Minimum 6 simvol"></div>
+   <button class="btn primary full" style="margin-top:24px; font-size:16px;">Hesab Yarat</button>
  </form>
- <p style="font-size:11px;color:#627188;margin-top:15px">Məlumatlar brauzer yaddaşında saxlanılır.</p>
 </div>
 </div>
 
-<!-- POST MODAL -->
+<!-- POST MODAL (WITH IMAGE UPLOAD) -->
 <div class="modal" id="postModal">
 <div class="modalBox">
- <div class="modalHead"><div><h2 style="font-size:27px;margin:0">Məndə var 📦</h2><p class="sub" style="margin:5px 0">Satdığın məhsulu insanlara göstər.</p></div><button class="close" onclick="closeModal('postModal')">×</button></div>
- <div id="postNotice" class="notice"></div>
+ <div class="modalHead">
+   <div><h2 style="font-size:32px; margin:0; letter-spacing:-1px;">Məndə var 📦</h2><p class="sub" style="margin:8px 0">Məhsulunu alıcılara nümayiş etdir.</p></div>
+   <button class="close" onclick="closeModal('postModal')">×</button>
+ </div>
  <form onsubmit="createListing(event)">
   <div class="formGrid">
-   <div class="field full"><label>Məhsulun adı</label><input id="itemTitle" required placeholder="Məsələn, iPhone 15 Pro 256GB"></div>
-   <div class="field"><label>Kateqoriya</label><select id="itemCat"><option>Elektronika</option><option>Avtomobil</option><option>Ev</option><option>Geyim</option><option>Digər</option></select></div>
-   <div class="field"><label>Qiymət (₼)</label><input id="itemPrice" type="number" min="0" required placeholder="650"></div>
+   <div class="field full">
+     <label>Məhsulun Şəkli (İstəyə bağlı)</label>
+     <label for="itemImageInput" class="file-upload" id="uploadArea">
+       <div class="upload-text">
+         <span style="font-size:24px;">📸</span><br>
+         <b style="color:#fff;">Şəkil yükləmək üçün kliklə</b><br>
+         <span style="font-size:12px; color:#8b9bb4;">Yüksək keyfiyyətli şəkil satış şansını artırır</span>
+       </div>
+       <img id="imagePreview" class="preview" alt="Preview">
+     </label>
+     <input type="file" id="itemImageInput" accept="image/*" hidden onchange="handleImageUpload(event)">
+   </div>
+   <div class="field full"><label>Məhsulun adı</label><input id="itemTitle" required placeholder="Məsələn, iPhone 15 Pro Max 256GB"></div>
+   <div class="field"><label>Kateqoriya</label><select id="itemCat"><option>Elektronika</option><option>Avtomobil</option><option>Ev & Dekor</option><option>Moda</option><option>Digər</option></select></div>
+   <div class="field"><label>Qiymət (₼)</label><input id="itemPrice" type="number" min="0" required placeholder="2500"></div>
    <div class="field"><label>Şəhər</label><input id="itemCity" required value="Bakı" placeholder="Bakı"></div>
    <div class="field"><label>Vəziyyət</label><select id="itemCondition"><option>Yeni</option><option>Çox yaxşı</option><option>Yaxşı</option><option>İşlənmiş</option></select></div>
-   <div class="field full"><label>Açıqlama</label><textarea id="itemDesc" required placeholder="Məhsul haqqında qısa məlumat..."></textarea></div>
+   <div class="field full"><label>Açıqlama</label><textarea id="itemDesc" required placeholder="Məhsulun vəziyyəti, yaddaşı, zəmanəti və s. barədə ətraflı məlumat..."></textarea></div>
   </div>
-  <button class="btn secondary full" style="margin-top:16px">Elanı yayımla</button>
+  <button class="btn secondary full" style="margin-top:24px; font-size:16px;">Məhsulu Yayımla</button>
  </form>
 </div>
 </div>
@@ -245,18 +336,20 @@ footer{padding:35px 0 50px;color:#69788e;border-top:1px solid var(--line);font-s
 <!-- NEED MODAL -->
 <div class="modal" id="needModal">
 <div class="modalBox">
- <div class="modalHead"><div><h2 style="font-size:27px;margin:0">Mənə lazımdır 🔎</h2><p class="sub" style="margin:5px 0">Axtardığını yaz, uyğun satıcıları tap.</p></div><button class="close" onclick="closeModal('needModal')">×</button></div>
- <div id="needNotice" class="notice"></div>
+ <div class="modalHead">
+   <div><h2 style="font-size:32px; margin:0; letter-spacing:-1px;">Mənə lazımdır 🔎</h2><p class="sub" style="margin:8px 0">Nə axtarırsan? Yaz, biz tapaq.</p></div>
+   <button class="close" onclick="closeModal('needModal')">×</button>
+ </div>
  <form onsubmit="createNeed(event)">
   <div class="formGrid">
-   <div class="field full"><label>Nə axtarırsan?</label><input id="needTitle" required placeholder="Məsələn, MacBook Air M2"></div>
-   <div class="field"><label>Maksimum qiymət (₼)</label><input id="needPrice" type="number" min="0" required placeholder="900"></div>
-   <div class="field"><label>Kateqoriya</label><select id="needCat"><option>Elektronika</option><option>Avtomobil</option><option>Ev</option><option>Geyim</option><option>Digər</option></select></div>
+   <div class="field full"><label>Dəqiq nə axtarırsan?</label><input id="needTitle" required placeholder="Məsələn, PlayStation 5, ancaq disk versiyası"></div>
+   <div class="field"><label>Maksimum büdcən (₼)</label><input id="needPrice" type="number" min="0" required placeholder="1000"></div>
+   <div class="field"><label>Kateqoriya</label><select id="needCat"><option>Elektronika</option><option>Avtomobil</option><option>Ev & Dekor</option><option>Moda</option><option>Digər</option></select></div>
    <div class="field"><label>Şəhər</label><input id="needCity" required value="Bakı"></div>
-   <div class="field"><label>Əlaqə üsulu</label><select id="needContact"><option>Saytda mesaj</option><option>E-poçt</option></select></div>
-   <div class="field full"><label>Əlavə tələblər</label><textarea id="needDesc" placeholder="Rəng, model, yaddaş və s."></textarea></div>
+   <div class="field"><label>Uyğunlaşma Bildirişi</label><select id="needContact"><option>Daxili sistem (VARLAZ)</option><option>E-poçt ilə xəbərdarlıq</option></select></div>
+   <div class="field full"><label>Spesifik Tələblər</label><textarea id="needDesc" placeholder="Rəngi mütləq qara olsun, batareya faizi 90+ və s."></textarea></div>
   </div>
-  <button class="btn primary full" style="margin-top:16px">Axtarışı yarat</button>
+  <button class="btn primary full" style="margin-top:24px; font-size:16px;">Axtarışı Aktivləşdir</button>
  </form>
 </div>
 </div>
@@ -264,149 +357,240 @@ footer{padding:35px 0 50px;color:#69788e;border-top:1px solid var(--line);font-s
 <!-- PROFILE MODAL -->
 <div class="modal" id="profileModal">
 <div class="modalBox">
- <div class="modalHead"><div><h2 style="font-size:27px;margin:0">Profil</h2><p class="sub" style="margin:5px 0">Sənin hesabın.</p></div><button class="close" onclick="closeModal('profileModal')">×</button></div>
+ <div class="modalHead"><div><h2 style="font-size:32px; margin:0; letter-spacing:-1px;">Profil İdarəetməsi</h2></div><button class="close" onclick="closeModal('profileModal')">×</button></div>
  <div id="profileContent"></div>
 </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">🔔 <span id="toastMsg"></span></div>
 
 <script>
-// İlkin demo məlumatlar
+// Base64 Image upload state
+let currentUploadedImage = null;
+
+function handleImageUpload(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  // Ağırlıq yoxlaması (Demo üçün 2MB limit qoyaq ki localStorage dolmasın)
+  if(file.size > 2 * 1024 * 1024) {
+     showToast("Şəkil çox böyükdür. Maksimum 2MB yükləyə bilərsiniz.");
+     return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    currentUploadedImage = event.target.result;
+    const preview = document.getElementById("imagePreview");
+    preview.src = currentUploadedImage;
+    document.getElementById("uploadArea").classList.add("has-image");
+  };
+  reader.readAsDataURL(file);
+}
+
+// Reset form uploads
+function resetUploadState() {
+  currentUploadedImage = null;
+  document.getElementById("uploadArea").classList.remove("has-image");
+  document.getElementById("imagePreview").src = "";
+  document.getElementById("itemImageInput").value = "";
+}
+
+// Demo data
 const seedListings=[
- {id:1,title:"MacBook Pro 14 M3",cat:"Elektronika",price:2500,city:"Bakı",condition:"Çox yaxşı",desc:"16GB RAM, 512GB SSD. Təmiz vəziyyətdə.",owner:"Orxan",emoji:"💻"},
- {id:2,title:"PlayStation 5 Slim",cat:"Elektronika",price:850,city:"Sumqayıt",condition:"Yaxşı",desc:"Disk versiyası, 2 controller.",owner:"Aydın",emoji:"🎮"},
- {id:3,title:"BMW 320d",cat:"Avtomobil",price:18500,city:"Bakı",condition:"Yaxşı",desc:"Gündəlik istifadə olunub.",owner:"Cavid",emoji:"🚗"},
- {id:4,title:"IKEA MALM masa",cat:"Ev",price:120,city:"Gəncə",condition:"Yaxşı",desc:"Ağ rəng, çox az istifadə olunub.",owner:"Leyla",emoji:"🪑"},
- {id:5,title:"Nike Air Max",cat:"Geyim",price:150,city:"Bakı",condition:"Yeni",desc:"Ölçü 43.",owner:"Rəsul",emoji:"👟"},
- {id:6,title:"iPhone 15 Pro 256GB",cat:"Elektronika",price:1900,city:"Bakı",condition:"Çox yaxşı",desc:"Batareya vəziyyəti yaxşıdır.",owner:"Maks",emoji:"📱"}
+ {id:1, title:"MacBook Pro 14 M3 Max", cat:"Elektronika", price:5200, city:"Bakı", condition:"Yeni", desc:"Bağlı qutuda, rəsmi zəmanətlə.", owner:"Aqil", emoji:"💻", image:null},
+ {id:2, title:"Sony A7 IV Kamera", cat:"Elektronika", price:4100, city:"Gəncə", condition:"Çox yaxşı", desc:"Yalnız studiyada istifadə olunub. Shutter count: 12k.", owner:"Rəşad", emoji:"📷", image:null},
+ {id:3, title:"Mərmər Dizaynlı Jurnal Masası", cat:"Ev & Dekor", price:350, city:"Bakı", condition:"Yeni", desc:"Xüsusi sifarişlə yığılıb, çox ağır və keyfiyyətlidir.", owner:"Aygün", emoji:"🛋️", image:null}
 ];
 const seedNeeds=[
- {title:"MacBook Air M2",price:1800,cat:"Elektronika",city:"Bakı"},
- {title:"Gaming PC",price:2000,cat:"Elektronika",city:"Sumqayıt"},
- {title:"Toyota Corolla",price:15000,cat:"Avtomobil",city:"Bakı"},
- {title:"Divan",price:350,cat:"Ev",city:"Xırdalan"}
+ {title:"PlayStation 5 Slim", price:900, cat:"Elektronika", city:"Bakı"},
+ {title:"Herman Miller Kreslo", price:1200, cat:"Ev & Dekor", city:"Bakı"}
 ];
 
-// Brauzer yaddaşından (localStorage) məlumatları gətirən funksiyalar
-function getListings(){return JSON.parse(localStorage.getItem("varimListings")||"null")||seedListings}
-function saveListings(x){localStorage.setItem("varimListings",JSON.stringify(x))}
-function getNeeds(){return JSON.parse(localStorage.getItem("varimNeeds")||"null")||seedNeeds}
-function saveNeeds(x){localStorage.setItem("varimNeeds",JSON.stringify(x))}
-function getUser(){return JSON.parse(localStorage.getItem("varimUser")||"null")}
+function getListings(){return JSON.parse(localStorage.getItem("varlazListings")||"null")||seedListings}
+function saveListings(x){localStorage.setItem("varlazListings",JSON.stringify(x))}
+function getNeeds(){return JSON.parse(localStorage.getItem("varlazNeeds")||"null")||seedNeeds}
+function saveNeeds(x){localStorage.setItem("varlazNeeds",JSON.stringify(x))}
+function getUser(){return JSON.parse(localStorage.getItem("varlazUser")||"null")}
 
-// Səhifə daxili keçid və Modal idarəetməsi
-function go(id){document.getElementById(id)?.scrollIntoView({behavior:"smooth"});closeAll()}
-function openModal(id){document.getElementById(id).classList.add("show")}
-function closeModal(id){document.getElementById(id).classList.remove("show")}
-function closeAll(){document.querySelectorAll(".modal").forEach(x=>x.classList.remove("show"))}
-document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}))
+function go(id) { document.getElementById(id)?.scrollIntoView({behavior:"smooth"}); closeAll(); }
+function openModal(id) { document.getElementById(id).classList.add("show"); document.body.style.overflow = 'hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove("show"); document.body.style.overflow = 'auto'; }
+function closeAll() { document.querySelectorAll(".modal").forEach(x=>x.classList.remove("show")); document.body.style.overflow = 'auto'; }
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)closeModal(m.id)}))
 
-// Qeydiyyat və Giriş
-function openAuth(mode="login"){switchAuth(mode);openModal("authModal")}
-function switchAuth(mode){
- const l=mode==="login"; document.getElementById("loginForm").style.display=l?"block":"none";document.getElementById("registerForm").style.display=l?"none":"block";
- document.getElementById("loginTab").classList.toggle("active",l);document.getElementById("registerTab").classList.toggle("active",!l);
- document.getElementById("authNotice").className="notice";document.getElementById("authNotice").textContent=""
+function openAuth(mode="login") { switchAuth(mode); openModal("authModal"); }
+function switchAuth(mode) {
+ const isLogin = mode==="login";
+ document.getElementById("loginForm").style.display = isLogin ? "block" : "none";
+ document.getElementById("registerForm").style.display = isLogin ? "none" : "block";
+ document.getElementById("loginTab").style.background = isLogin ? "rgba(255,255,255,0.1)" : "transparent";
+ document.getElementById("loginTab").style.color = isLogin ? "#fff" : "#8b9bb4";
+ document.getElementById("registerTab").style.background = !isLogin ? "rgba(255,255,255,0.1)" : "transparent";
+ document.getElementById("registerTab").style.color = !isLogin ? "#fff" : "#8b9bb4";
 }
+
 function register(e){
- e.preventDefault(); const name=regName.value.trim(),email=regEmail.value.trim().toLowerCase(),pass=regPass.value;
- let users=JSON.parse(localStorage.getItem("varimUsers")||"[]");
- if(users.some(u=>u.email===email)){notice("authNotice","Bu e-poçt artıq qeydiyyatdan keçib.","err");return}
- users.push({name,email,pass});localStorage.setItem("varimUsers",JSON.stringify(users));localStorage.setItem("varimUser",JSON.stringify({name,email}));
- closeModal("authModal");updateNav();showToast("Hesabın yaradıldı. Xoş gəldin, "+name+"!");renderListings()
+ e.preventDefault(); const name=document.getElementById('regName').value.trim(), email=document.getElementById('regEmail').value.trim().toLowerCase(), pass=document.getElementById('regPass').value;
+ let users=JSON.parse(localStorage.getItem("varlazUsers")||"[]");
+ if(users.some(u=>u.email===email)){ showToast("Bu e-poçt artıq mövcuddur."); return; }
+ users.push({name,email,pass}); localStorage.setItem("varlazUsers",JSON.stringify(users)); localStorage.setItem("varlazUser",JSON.stringify({name,email}));
+ closeModal("authModal"); updateNav(); showToast("Hesab yaradıldı! Xoş gəldin, "+name); renderListings();
 }
-function login(e){
- e.preventDefault();let email=loginEmail.value.trim().toLowerCase(),pass=loginPass.value;
- let users=JSON.parse(localStorage.getItem("varimUsers")||"[]"),u=users.find(x=>x.email===email&&x.pass===pass);
- if(!u){notice("authNotice","E-poçt və ya şifrə yanlışdır.","err");return}
- localStorage.setItem("varimUser",JSON.stringify({name:u.name,email:u.email}));closeModal("authModal");updateNav();showToast("Xoş gəldin, "+u.name+"!");renderListings()
-}
-function logout(){localStorage.removeItem("varimUser");updateNav();showToast("Hesabdan çıxış edildi.");renderListings();}
 
-// Menyunu İstifadəçi/Qonaq olaraq yenilə
+function login(e){
+ e.preventDefault(); let email=document.getElementById('loginEmail').value.trim().toLowerCase(), pass=document.getElementById('loginPass').value;
+ let users=JSON.parse(localStorage.getItem("varlazUsers")||"[]"), u=users.find(x=>x.email===email&&x.pass===pass);
+ if(!u){ showToast("E-poçt və ya şifrə yanlışdır."); return; }
+ localStorage.setItem("varlazUser",JSON.stringify({name:u.name,email:u.email})); closeModal("authModal"); updateNav(); showToast("Giriş uğurlu oldu."); renderListings();
+}
+
+function logout(){ localStorage.removeItem("varlazUser"); updateNav(); showToast("Hesabdan çıxış edildi."); renderListings(); closeModal('profileModal'); }
+
 function updateNav(){
  const u=getUser();
- document.getElementById("guestNav").style.display=u?"none":"block";
- document.getElementById("userNav").style.display=u?"flex":"none";
- if(u){document.getElementById("avatar").textContent=(u.name||"V").charAt(0).toUpperCase()}
+ document.getElementById("guestNav").style.display = u ? "none" : "flex";
+ document.getElementById("userNav").style.display = u ? "flex" : "none";
+ if(u) document.getElementById("avatar").textContent = (u.name||"V").charAt(0).toUpperCase();
 }
 
-// Yoxlama - İstifadəçi daxil olubmu?
-function requireAuth(){
-  if(!getUser()){openAuth("register");showToast("Əvvəlcə qeydiyyatdan keçməlisiniz.");return false}
-  return true
-}
+function requireAuth(){ if(!getUser()){ openAuth("login"); showToast("Davam etmək üçün sistemə daxil olun."); return false; } return true; }
+function openPost(){ if(requireAuth()){ resetUploadState(); openModal("postModal"); } }
+function openNeed(){ if(requireAuth()) openModal("needModal"); }
 
-function openPost(){if(requireAuth())openModal("postModal")}
-function openNeed(){if(requireAuth())openModal("needModal")}
-
-// Məhsul ("Məndə var") Əlavə et
 function createListing(e){
- e.preventDefault();if(!requireAuth())return;
- let arr=getListings(),u=getUser();
+ e.preventDefault(); if(!requireAuth()) return;
+ let arr = getListings(), u = getUser();
  arr.unshift({
-   id:Date.now(),title:itemTitle.value.trim(),cat:itemCat.value,price:Number(itemPrice.value),
-   city:itemCity.value.trim(),condition:itemCondition.value,desc:itemDesc.value.trim(),
-   owner:u.name,emoji:iconFor(itemCat.value)
+   id: Date.now(), title: document.getElementById('itemTitle').value.trim(),
+   cat: document.getElementById('itemCat').value, price: Number(document.getElementById('itemPrice').value),
+   city: document.getElementById('itemCity').value.trim(), condition: document.getElementById('itemCondition').value,
+   desc: document.getElementById('itemDesc').value.trim(), owner: u.name,
+   emoji: iconFor(document.getElementById('itemCat').value),
+   image: currentUploadedImage // Base64 şəkli əlavə edirik
  });
- saveListings(arr);closeModal("postModal");e.target.reset();itemCity.value="Bakı";
- renderListings();showToast("Elanın yayımlandı!");document.getElementById("explore").scrollIntoView({behavior:"smooth"})
+ saveListings(arr); closeModal("postModal"); e.target.reset(); resetUploadState();
+ renderListings(); showToast("Məhsul qlobal bazara əlavə edildi!");
+ document.getElementById("explore").scrollIntoView({behavior:"smooth"});
 }
 
-// Axtarış ("Mənə lazımdır") Əlavə et
 function createNeed(e){
- e.preventDefault();if(!requireAuth())return;
- let arr=getNeeds();
+ e.preventDefault(); if(!requireAuth()) return;
+ let arr = getNeeds();
  arr.unshift({
-   title:needTitle.value.trim(),price:Number(needPrice.value),cat:needCat.value,
-   city:needCity.value.trim(),desc:needDesc.value.trim(),owner:getUser().name
+   title: document.getElementById('needTitle').value.trim(), price: Number(document.getElementById('needPrice').value),
+   cat: document.getElementById('needCat').value, city: document.getElementById('needCity').value.trim(),
+   desc: document.getElementById('needDesc').value.trim(), owner: getUser().name
  });
- saveNeeds(arr);closeModal("needModal");e.target.reset();needCity.value="Bakı";
- renderNeeds();renderMini();showToast("Axtarışın yaradıldı!");document.getElementById("market").scrollIntoView({behavior:"smooth"})
+ saveNeeds(arr); closeModal("needModal"); e.target.reset();
+ renderNeeds(); renderMini(); showToast("Tələb aktivləşdirildi. İzləyirik!");
+ document.getElementById("market").scrollIntoView({behavior:"smooth"});
 }
 
-function iconFor(c){return {Elektronika:"💻",Avtomobil:"🚗",Ev:"🏠",Geyim:"👟",Digər:"📦"}[c]||"📦"}
+function iconFor(c){ return {"Elektronika":"💻", "Avtomobil":"🚗", "Ev & Dekor":"🛋️", "Moda":"👕", "Digər":"📦"}[c]||"📦"; }
 
-// Siyahıları ekrana yazdırmaq
 function renderNeeds(){
- let n=getNeeds(),el=document.getElementById("needList");
- el.innerHTML=n.slice(0,5).map(x=>`<div style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07)"><div style="display:flex;justify-content:space-between;gap:10px"><b>${esc(x.title)}</b><span style="color:#69e6b5">₼${x.price}</span></div><small style="color:#728199">${esc(x.city)} · ${esc(x.cat)}</small></div>`).join("")
+ let n = getNeeds(), el = document.getElementById("needList");
+ el.innerHTML = n.slice(0,5).map(x=>`
+   <div style="padding:15px; border-bottom:1px solid rgba(255,255,255,0.05); transition:0.3s; cursor:pointer;" onmouseover="this.style.background='rgba(255,255,255,0.03)'" onmouseout="this.style.background='transparent'">
+     <div style="display:flex; justify-content:space-between; gap:10px;">
+       <b style="font-size:16px;">${esc(x.title)}</b>
+       <span style="color:var(--green); font-weight:700;">Max ₼${x.price}</span>
+     </div>
+     <div style="display:flex; justify-content:space-between; margin-top:8px;">
+       <small style="color:#8b9bb4; font-weight:500;">📍 ${esc(x.city)} · ${esc(x.cat)}</small>
+       <small style="color:#7c5cff; font-weight:600;">👤 ${esc(x.owner)} axtarır</small>
+     </div>
+   </div>`).join("");
 }
+
 function renderMini(){
- let a=getListings(),el=document.getElementById("haveMiniList");
- el.innerHTML=a.slice(0,5).map(x=>`<div style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07);display:flex;gap:10px"><span style="font-size:24px">${x.emoji}</span><div><b>${esc(x.title)}</b><div><small style="color:#728199">${esc(x.city)} · </small><span style="color:#69e6b5">₼${x.price}</span></div></div></div>`).join("")
+ let a = getListings(), el = document.getElementById("haveMiniList");
+ el.innerHTML = a.slice(0,5).map(x=>`
+   <div style="padding:15px; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; gap:15px; align-items:center;">
+     <div style="width:45px; height:45px; border-radius:12px; background:${x.image ? `url(${x.image}) center/cover` : 'rgba(124,92,255,0.1)'}; display:grid; place-items:center; font-size:20px;">
+       ${!x.image ? x.emoji : ''}
+     </div>
+     <div style="flex:1;">
+       <div style="display:flex; justify-content:space-between;">
+         <b style="font-size:15px;">${esc(x.title)}</b>
+         <span style="color:#fff; font-weight:700;">₼${x.price}</span>
+       </div>
+       <small style="color:#8b9bb4;">📍 ${esc(x.city)}</small>
+     </div>
+   </div>`).join("");
 }
+
 function renderListings(){
- let a=getListings(),cat=document.getElementById("filterCat").value;if(cat)a=a.filter(x=>x.cat===cat);
- let el=document.getElementById("listings");if(!a.length){el.innerHTML='<div class="empty">Bu kateqoriyada hələ elan yoxdur.</div>';return}
- el.innerHTML=a.map(x=>`<article class="card listing"><div class="listingTop">${x.emoji}</div><div class="listingBody"><div class="meta"><span>${esc(x.cat)}</span><span>·</span><span>${esc(x.city)}</span></div><h3 style="margin-top:8px">${esc(x.title)}</h3><div class="price">₼${Number(x.price).toLocaleString("az-AZ")}</div><p class="sub" style="font-size:13px;min-height:42px">${esc(x.desc||"Ətraflı məlumat üçün satıcı ilə əlaqə saxla.")}</p><div class="listingFoot"><small style="color:#728199">👤 ${esc(x.owner)}</small><button class="btn primary" onclick="contact('${encodeURIComponent(x.owner)}')">Əlaqə</button></div></div></article>`).join("");
- renderNeeds();renderMini();
- document.getElementById("heroHaveCount").textContent=300+a.length*7;document.getElementById("heroNeedCount").textContent=120+getNeeds().length*2
+ let a = getListings(), cat = document.getElementById("filterCat").value;
+ if(cat) a = a.filter(x=>x.cat===cat);
+ let el = document.getElementById("listings");
+ if(!a.length) { el.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:60px; background:rgba(255,255,255,0.02); border-radius:20px; border:1px dashed rgba(255,255,255,0.1); color:#8b9bb4;">Bu kateqoriyada hələ məhsul yoxdur. İlk sən əlavə et!</div>'; return; }
+ 
+ el.innerHTML = a.map(x=>`
+   <article class="card listing">
+     <div class="listingTop" style="${x.image ? `background: url(${x.image});` : ''}">
+       ${!x.image ? x.emoji : ''}
+     </div>
+     <div class="listingBody">
+       <div class="meta"><span style="background:rgba(124,92,255,0.15); color:#cfc7ff; padding:4px 8px; border-radius:6px;">${esc(x.cat)}</span><span>📍 ${esc(x.city)}</span><span>✨ ${esc(x.condition)}</span></div>
+       <h3 style="margin-top:16px">${esc(x.title)}</h3>
+       <div class="price">₼${Number(x.price).toLocaleString("az-AZ")}</div>
+       <p class="sub" style="font-size:14px; line-height:1.5; margin-bottom:15px;">${esc(x.desc)}</p>
+       <div class="listingFoot">
+         <span style="display:flex; align-items:center; gap:8px; font-weight:600; font-size:13px; color:#a4b3c6;">
+            <div style="width:24px; height:24px; border-radius:50%; background:var(--primary); color:#fff; display:grid; place-items:center;">${esc(x.owner).charAt(0)}</div>
+            ${esc(x.owner)}
+         </span>
+         <button class="btn primary" style="padding:10px 18px; font-size:14px;" onclick="contact('${encodeURIComponent(x.owner)}')">Alıram</button>
+       </div>
+     </div>
+   </article>`).join("");
+ 
+ renderNeeds(); renderMini();
+ document.getElementById("heroHaveCount").textContent = 300 + a.length * 7;
+ document.getElementById("heroNeedCount").textContent = 120 + getNeeds().length * 2;
 }
 
-// Əlaqə düyməsi
 function contact(owner){
-  if(!requireAuth())return;
-  showToast("Satıcı ("+decodeURIComponent(owner)+") ilə əlaqə sorğusu göndərildi.");
+  if(!requireAuth()) return;
+  showToast("Satıcıya ("+decodeURIComponent(owner)+") VARLAZ sistemi üzərindən əlaqə bildirişi göndərildi.");
 }
 
-// Profil göstərmək
 function openProfile(){
- if(!getUser())return openAuth("login");
- let u=getUser(),a=getListings().filter(x=>x.owner===u.name),n=getNeeds().filter(x=>x.owner===u.name);
- document.getElementById("profileContent").innerHTML=`<div class="card" style="margin-bottom:14px"><div style="display:flex;align-items:center;gap:14px"><div class="avatar" style="width:52px;height:52px;font-size:24px">${u.name.charAt(0).toUpperCase()}</div><div><h3 style="margin:0">${esc(u.name)}</h3><p class="sub" style="margin:3px 0">${esc(u.email)}</p></div></div></div><div class="features" style="grid-template-columns:1fr 1fr"><div class="card"><b style="font-size:25px">${a.length}</b><p>Məhsul elanı</p></div><div class="card"><b style="font-size:25px">${n.length}</b><p>Axtarış</p></div></div><button class="btn primary full" style="margin-top:15px" onclick="openPost();closeModal('profileModal')">＋ Yeni elan əlavə et</button>`;
- openModal("profileModal")
+ if(!getUser()) return openAuth("login");
+ let u = getUser(), a = getListings().filter(x=>x.owner===u.name), n = getNeeds().filter(x=>x.owner===u.name);
+ document.getElementById("profileContent").innerHTML = `
+   <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:24px; margin-bottom:20px; display:flex; align-items:center; gap:20px;">
+     <div style="width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg, var(--primary), var(--primary2)); font-size:28px; font-weight:800; color:#fff; display:grid; place-items:center;">${u.name.charAt(0).toUpperCase()}</div>
+     <div>
+       <h3 style="margin:0; font-size:22px;">${esc(u.name)}</h3>
+       <p style="margin:4px 0 0; color:#8b9bb4; font-size:14px;">${esc(u.email)} • Təsdiqlənmiş Hesab ✓</p>
+     </div>
+   </div>
+   <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
+     <div style="background:rgba(124,92,255,0.1); border:1px solid rgba(124,92,255,0.2); border-radius:16px; padding:20px; text-align:center;">
+       <b style="font-size:32px; color:#fff;">${a.length}</b><p style="margin:5px 0 0; color:#cfc7ff; font-weight:500;">Aktiv Elan</p>
+     </div>
+     <div style="background:rgba(32,212,255,0.1); border:1px solid rgba(32,212,255,0.2); border-radius:16px; padding:20px; text-align:center;">
+       <b style="font-size:32px; color:#fff;">${n.length}</b><p style="margin:5px 0 0; color:#bdf1ff; font-weight:500;">Aktiv Axtarış</p>
+     </div>
+   </div>
+   <div style="display:flex; gap:12px;">
+     <button class="btn secondary" style="flex:1;" onclick="openPost(); closeModal('profileModal')">＋ Məhsul Əlavə Et</button>
+     <button class="btn dark" style="color:var(--danger); border-color:rgba(255,102,125,0.3);" onclick="logout()">Çıxış Et</button>
+   </div>`;
+ openModal("profileModal");
 }
 
-// Xəbərdarlıqlar (Toast və Modal içi)
-function notice(id,msg,type){let x=document.getElementById(id);x.textContent=msg;x.className="notice "+type}
-function showToast(msg){let t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove("show"),2800)}
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function showToast(msg){
+  let t = document.getElementById("toast");
+  document.getElementById("toastMsg").textContent = msg;
+  t.classList.add("show");
+  clearTimeout(window.tt);
+  window.tt = setTimeout(() => t.classList.remove("show"), 3000);
+}
+function esc(s){ return String(s??"").replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])); }
 
-// Başlanğıc yükləmə
-updateNav();
-renderListings();
+updateNav(); renderListings();
 </script>
 </body>
 </html>
