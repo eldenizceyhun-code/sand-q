@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Xiyar Ovçusu - Telegram Game</title>
+    <title>Lada 07: Bakı Gecələri 3D</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Three.js 3D Kitabxanası -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -15,61 +17,134 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1b2838, #0f1923);
+            background-color: #0b0c10;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            height: 100dvh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            height: 100dvh;
-            overflow: hidden;
-            position: relative;
+            justify-content: space-between;
         }
 
-        /* Oyun Paneli (Statistika) */
-        .game-header {
+        /* Dashboard (Statistika) */
+        .hud {
             position: absolute;
             top: 15px;
-            left: 20px;
-            right: 20px;
+            left: 15px;
+            right: 15px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            font-size: 1.2rem;
-            font-weight: bold;
             z-index: 10;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 10px 15px;
+            pointer-events: none;
+        }
+
+        .hud-box {
+            background: rgba(15, 20, 25, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 18px;
             border-radius: 12px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #66fcf1;
         }
 
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Oyun Sahəsi (Canvas) */
-        canvas {
-            display: block;
-            background: radial-gradient(circle, #22303c, #141d26);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border-bottom: 4px solid #2ecc71;
-        }
-
-        /* Oyun Bitdi (Game Over) Ekranı */
-        #gameOverScreen {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
+        #gameCanvas {
             width: 100%;
             height: 100%;
-            background: rgba(15, 25, 35, 0.95);
+            display: block;
+        }
+
+        /* İdarəetmə Paneli (Rul və Pedallar) */
+        .controls-container {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 25px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .control-group {
+            pointer-events: auto;
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Sükan (Rul) */
+        .steering-wheel {
+            width: 130px;
+            height: 130px;
+            border: 8px solid #c5c6c0;
+            border-radius: 50%;
+            position: relative;
+            background: rgba(31, 40, 51, 0.4);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: none;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .steering-wheel::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #45a29e;
+            border-radius: 50%;
+        }
+
+        .steering-wheel::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 6px;
+            background: #c5c6c0;
+        }
+
+        /* Pedallar */
+        .pedal {
+            width: 65px;
+            height: 110px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #45a29e, #1f2833);
+            border: 3px solid #66fcf1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            touch-action: none;
+            transition: transform 0.1s;
+        }
+
+        .pedal:active {
+            transform: scale(0.92);
+            background: #66fcf1;
+            color: #0b0c10;
+        }
+
+        .gas-pedal { background: linear-gradient(135deg, #2ecc71, #27ae60); border-color: #2ecc71; }
+        .brake-pedal { background: linear-gradient(135deg, #e74c3c, #c0392b); border-color: #e74c3c; }
+
+        /* Oyun Bitdi Ekranı */
+        #gameOver {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 12, 16, 0.95);
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -78,231 +153,277 @@
             padding: 20px;
         }
 
-        #gameOverScreen h1 {
-            font-size: 2.5rem;
-            color: #e74c3c;
-            margin-bottom: 10px;
-        }
+        #gameOver h1 { font-size: 2.5rem; color: #e74c3c; margin-bottom: 10px; }
+        #gameOver p { font-size: 1.2rem; color: #c5c6c0; margin-bottom: 25px; }
 
-        #gameOverScreen p {
-            font-size: 1.2rem;
-            color: #bdc3c7;
-            margin-bottom: 25px;
-        }
-
-        .restart-btn {
-            background: linear-gradient(135deg, #2ecc71, #27ae60);
-            color: white;
+        .btn-restart {
+            background: #66fcf1;
+            color: #0b0c10;
             border: none;
-            padding: 12px 30px;
+            padding: 12px 35px;
             font-size: 1.2rem;
             font-weight: bold;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
-            transition: transform 0.1s;
-        }
-
-        .restart-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* Mobil İdarəetmə Düymələri (Aşağıda sola-sağa qaçmaq üçün) */
-        .controls {
-            position: absolute;
-            bottom: 20px;
-            display: flex;
-            gap: 20px;
-            width: 100%;
-            max-width: 400px;
-            padding: 0 20px;
-            z-index: 10;
-        }
-
-        .control-btn {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 2rem;
-            padding: 15px 0;
-            border-radius: 16px;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            transition: background 0.1s;
-        }
-
-        .control-btn:active {
-            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(102, 252, 241, 0.4);
         }
     </style>
 </head>
 <body>
 
-    <div class="game-header">
-        <div class="stat-item">🥒 Xiyar: <span id="score">0</span></div>
-        <div class="stat-item">❤️ Can: <span id="lives">3</span></div>
+    <div class="hud">
+        <div class="hud-box">🚗 Sürət: <span id="speedDisplay">0</span> km/s</div>
+        <div class="hud-box">🛣️ Məsafə: <span id="distanceDisplay">0</span> m</div>
     </div>
 
-    <!-- Oyun Canvası -->
     <canvas id="gameCanvas"></canvas>
 
-    <!-- Mobil Düymələr -->
-    <div class="controls">
-        <button class="control-btn" id="leftBtn">⬅️</button>
-        <button class="control-btn" id="rightBtn">➡️</button>
+    <!-- İdarəetmə Paneli (Rul və Pedallar) -->
+    <div class="controls-container">
+        <!-- Rul (Sükan) -->
+        <div class="control-group">
+            <div class="steering-wheel" id="steeringWheel"></div>
+        </div>
+
+        <!-- Pedallar -->
+        <div class="control-group">
+            <div class="pedal brake-pedal" id="brakeBtn">ƏYLƏC</div>
+            <div class="pedal gas-pedal" id="gasBtn">QAZ</div>
+        </div>
     </div>
 
-    <!-- Oyun Bitdi Ekranı -->
-    <div id="gameOverScreen">
-        <h1>Oyun Bitdi!</h1>
-        <p>Topladığın xiyarlar: <span id="finalScore">0</span></p>
-        <button class="restart-btn" onclick="restartGame()">Yenidən Oyna</button>
+    <!-- Oyun Bitdi -->
+    <div id="gameOver">
+        <h1>Qəza! 💥</h1>
+        <p>Bakı küçələrində vuruşdunuz. Qət edilən məsafə: <span id="finalDistance">0</span> m</p>
+        <button class="btn-restart" onclick="restartGame()">Yenidən Başla</button>
     </div>
 
     <script>
         const tg = window.Telegram?.WebApp;
         if (tg) tg.expand();
 
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+        // 3D Three.js Mühiti
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0b0c10);
+        scene.fog = new THREE.FogExp2(0x0b0c10, 0.015);
 
-        // Canvas ölçülərini ekrana uyğunlaşdırırıq
-        function resizeCanvas() {
-            canvas.width = Math.min(window.innerWidth - 20, 420);
-            canvas.height = window.innerHeight - 160;
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameCanvas'), antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+
+        // İşıqlandırma (Bakı gecələri / Küçə lampaları effekti)
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0x66fcf1, 0.8);
+        dirLight.position.set(10, 20, 10);
+        scene.add(dirLight);
+
+        // Yol (Bakı asfaltı)
+        const roadWidth = 14;
+        const roadGeometry = new THREE.PlaneGeometry(roadWidth, 1000);
+        const roadMaterial = new THREE.MeshStandardMaterial({ color: 0x1f2833, roughness: 0.8 });
+        const road = new THREE.Mesh(roadGeometry, roadMaterial);
+        road.rotation.x = -Math.PI / 2;
+        road.position.z = -400;
+        scene.add(road);
+
+        // Yol xətləri (Orta zolaq)
+        for (let i = 0; i > -1000; i -= 20) {
+            const lineGeo = new THREE.PlaneGeometry(0.4, 8);
+            const lineMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            const line = new THREE.Mesh(lineGeo, lineMat);
+            line.rotation.x = -Math.PI / 2;
+            line.position.set(0, 0.02, i);
+            scene.add(line);
         }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
 
-        let score = 0;
-        let lives = 3;
+        // Lada 07 (VAZ 2107) 3D Modelinin Qurulması (Sadələşdirilmiş Bloklardan Professional Görünüş)
+        const carGroup = new THREE.Group();
+
+        // Maşının Gövdəsi (Klassik kiglər - Ağ rəngdə Lada)
+        const bodyGeo = new THREE.BoxGeometry(2.2, 0.9, 4.4);
+        const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3, metalness: 0.2 });
+        const body = new THREE.Mesh(bodyGeo, bodyMat);
+        body.position.y = 0.8;
+        carGroup.add(body);
+
+        // Salon (Kabina)
+        const cabinGeo = new THREE.BoxGeometry(1.8, 0.8, 2.2);
+        const cabinMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.5 });
+        const cabin = new THREE.Mesh(cabinGeo, cabinMat);
+        cabin.position.set(0, 1.5, -0.2);
+        carGroup.add(cabin);
+
+        // Təkərlər
+        const wheelGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.4, 16);
+        wheelGeo.rotateZ(Math.PI / 2);
+        const wheelMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
+
+        const wheelPositions = [
+            [-1.2, 0.4, 1.4], [1.2, 0.4, 1.4],
+            [-1.2, 0.4, -1.4], [1.2, 0.4, -1.4]
+        ];
+
+        const wheels = [];
+        wheelPositions.forEach(pos => {
+            const wheel = new THREE.Mesh(wheelGeo, wheelMat);
+            wheel.position.set(...pos);
+            carGroup.add(wheel);
+            wheels.push(wheel);
+        });
+
+        scene.add(carGroup);
+        carGroup.position.set(0, 0, 0);
+
+        // Kamera Sürücü Görünüşü (Arxadan təqib)
+        camera.position.set(0, 4, 7);
+        camera.lookAt(carGroup.position);
+
+        // Maneələr (Bakı yolundakı digər maşınlar)
+        let obstacles = [];
+        function spawnObstacle() {
+            const obsGeo = new THREE.BoxGeometry(2.1, 1.1, 4.2);
+            const colors = [0xe74c3c, 0xf1c40f, 0x3498db, 0x9b59b6];
+            const obsMat = new THREE.MeshStandardMaterial({ color: colors[Math.floor(Math.random() * colors.length)] });
+            const obstacle = new THREE.Mesh(obsGeo, obsMat);
+            
+            const lanes = [-4.5, 0, 4.5];
+            const randomLane = lanes[Math.floor(Math.random() * lanes.length)];
+            
+            obstacle.position.set(randomLane, 0.8, -300);
+            scene.add(obstacle);
+            obstacles.push(obstacle);
+        }
+
+        // Oyun Dəyişənləri
+        let carX = 0;
+        let speed = 0;
+        let maxSpeed = 1.2;
+        let distance = 0;
+        let isGasPressed = false;
+        let isBrakePressed = false;
+        let steeringAngle = 0;
         let isGameOver = false;
 
-        // Qəhrəman (Adam)
-        const player = {
-            x: canvas.width / 2 - 30,
-            y: canvas.height - 80,
-            width: 60,
-            height: 70,
-            speed: 8,
-            dx: 0
-        };
+        // İdarəetmə Dinamikaları (Pedal və Rul)
+        document.getElementById('gasBtn').addEventListener('pointerdown', () => { isGasPressed = true; });
+        document.getElementById('gasBtn').addEventListener('pointerup', () => { isGasPressed = false; });
+        document.getElementById('brakeBtn').addEventListener('pointerdown', () => { isBrakePressed = true; });
+        document.getElementById('brakeBtn').addEventListener('pointerup', () => { isBrakePressed = false; });
 
-        // Xiyarlar və Maneələr massivi
-        let items = [];
-        let spawnTimer = 0;
+        // Rulun dönməsi (Touch / Mouse)
+        const steeringWheel = document.getElementById('steeringWheel');
+        let isSteering = false;
+        let startX = 0;
 
-        // Klaviatura idarəetməsi (Kompüter üçün)
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft' || e.key === 'a') player.dx = -player.speed;
-            if (e.key === 'ArrowRight' || e.key === 'd') player.dx = player.speed;
+        steeringWheel.addEventListener('pointerdown', (e) => {
+            isSteering = true;
+            startX = e.clientX;
         });
 
-        window.addEventListener('keyup', (e) => {
-            if ((e.key === 'ArrowLeft' || e.key === 'a') && player.dx < 0) player.dx = 0;
-            if ((e.key === 'ArrowRight' || e.key === 'd') && player.dx > 0) player.dx = 0;
+        window.addEventListener('pointermove', (e) => {
+            if (!isSteering) return;
+            let diff = e.clientX - startX;
+            steeringAngle = Math.max(-1, Math.min(1, diff / 60));
         });
 
-        // Sensor / Mobil Düymə idarəetməsi
-        const leftBtn = document.getElementById('leftBtn');
-        const rightBtn = document.getElementById('rightBtn');
+        window.addEventListener('pointerup', () => {
+            isSteering = false;
+            steeringAngle = 0;
+        });
 
-        leftBtn.addEventListener('touchstart', () => { player.dx = -player.speed; });
-        leftBtn.addEventListener('touchend', () => { player.dx = 0; });
-        leftBtn.addEventListener('mousedown', () => { player.dx = -player.speed; });
-        leftBtn.addEventListener('mouseup', () => { player.dx = 0; });
-
-        rightBtn.addEventListener('touchstart', () => { player.dx = player.speed; });
-        rightBtn.addEventListener('touchend', () => { player.dx = 0; });
-        rightBtn.addEventListener('mousedown', () => { player.dx = player.speed; });
-        rightBtn.addEventListener('mouseup', () => { player.dx = 0; });
-
-        // Element yaratmaq (Xiyar və ya zəhərli tikanlı xiyar)
-        function spawnItem() {
-            const isBad = Math.random() < 0.25; // 25% ehtimalla zəhərli tikanlı xiyar gəlir
-            items.push({
-                x: Math.random() * (canvas.width - 40),
-                y: -50,
-                size: 35,
-                speed: 3 + Math.random() * 3,
-                isBad: isBad
-            });
-        }
-
-        // Oyunu yenidən başlatmaq
         window.restartGame = function() {
-            score = 0;
-            lives = 3;
-            items = [];
+            carX = 0;
+            speed = 0;
+            distance = 0;
+            obstacles.forEach(obs => scene.remove(obs));
+            obstacles = [];
             isGameOver = false;
-            document.getElementById('gameOverScreen').style.display = 'none';
-            document.getElementById('score').textContent = score;
-            document.getElementById('lives').textContent = lives;
+            document.getElementById('gameOver').style.display = 'none';
             loop();
         }
 
-        // Əsas Oyun Döngüsü (Game Loop)
-        function update() {
+        let spawnTimer = 0;
+
+        // Oyun Döngüsü
+        function loop() {
             if (isGameOver) return;
 
-            // Adamın hərəkəti (ekrandan çıxmasın deyə sərhəd qoyuruq)
-            player.x += player.dx;
-            if (player.x < 0) player.x = 0;
-            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+            // Sürətlənmə və əyləc
+            if (isGasPressed) {
+                speed = Math.min(maxSpeed, speed + 0.015);
+            } else {
+                speed = Math.max(0, speed - 0.01);
+            }
 
-            // Xiyar yaratma tezliyi
+            if (isBrakePressed) {
+                speed = Math.max(0, speed - 0.03);
+            }
+
+            // Maşının sola-sağa hərəkəti (Rul ilə)
+            carX += steeringAngle * 0.12;
+            carX = Math.max(-roadWidth / 2 + 1.5, Math.min(roadWidth / 2 - 1.5, carX));
+            carGroup.position.x = carX;
+
+            // Məsafə artımı
+            if (speed > 0) {
+                distance += Math.round(speed * 10);
+            }
+
+            // Maneələrin hərəkəti
             spawnTimer++;
-            if (spawnTimer > 40) {
-                spawnItem();
+            if (spawnTimer > 90 - speed * 40) {
+                spawnObstacle();
                 spawnTimer = 0;
             }
 
-            // Xiyarların hərəkəti və toxunma yoxlanışı
-            for (let i = items.length - 1; i >= 0; i--) {
-                let item = items[i];
-                item.y += item.speed;
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                obstacles[i].position.z += speed * 2;
 
-                // Adamla xiyar toqquşurmu? (Collision detection)
+                // Toqquşma (Qəza) yoxlanışı
                 if (
-                    player.x < item.x + item.size &&
-                    player.x + player.width > item.x &&
-                    player.y < item.y + item.size &&
-                    player.y + player.height > item.y
+                    Math.abs(carGroup.position.x - obstacles[i].position.x) < 1.8 &&
+                    Math.abs(carGroup.position.z - obstacles[i].position.z) < 3.5
                 ) {
-                    if (item.isBad) {
-                        // Tikanlı xiyara dəydi -> Can azalır
-                        lives--;
-                        if (lives <= 0) {
-                            isGameOver = true;
-                            document.getElementById('finalScore').textContent = score;
-                            document.getElementById('gameOverScreen').style.display = 'flex';
-                        }
-                    } else {
-                        // Dadlı xiyar -> Xal artır
-                        score += 10;
-                    }
-                    document.getElementById('score').textContent = score;
-                    document.getElementById('lives').textContent = lives;
-                    items.splice(i, 1);
-                    continue;
+                    isGameOver = true;
+                    document.getElementById('finalDistance').textContent = distance;
+                    document.getElementById('gameOver').style.display = 'flex';
                 }
 
-                // Ekrandan aşağı düşənləri silirik
-                if (item.y > canvas.height) {
-                    items.splice(i, 1);
+                // Arxada qalan maneəni sil
+                if (obstacles[i].position.z > 10) {
+                    scene.remove(obstacles[i]);
+                    obstacles.splice(i, 1);
                 }
             }
+
+            // Kamera tənzimlənməsi
+            camera.position.x = carX * 0.4;
+            camera.lookAt(carGroup.position.x, carGroup.position.y + 1, carGroup.position.z - 2);
+
+            // UI Yenilənməsi
+            document.getElementById('speedDisplay').textContent = Math.round(speed * 120);
+            document.getElementById('distanceDisplay').textContent = distance;
+
+            renderer.render(scene, camera);
+            if (!isGameOver) requestAnimationFrame(loop);
         }
 
-        // Çizim funksiyaları (Graphics)
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Ekran ölçüsü dəyişdikdə
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
 
-            // 1. Qəhrəmanı (Adamı) çəkirik (Gülməli emoji adam)
-            ctx.font = "50px Arial";
-            ctx.textAlign = "center";
-            ctx.fillText("🏃‍♂️", player.x + player.width / 2, player.y + 50);
+        loop();
+    </script>
+</body>
+</html>
+idth / 2, player.y + 50);
 
             // 2. Xiyarları çəkirik
             for (let item of items) {
