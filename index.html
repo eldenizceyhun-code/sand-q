@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Lada 07: Bakı Gecələri 3D</title>
+    <title>Lada 07: Bakı Drift Pro (GTA Physics)</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Three.js 3D Kitabxanası -->
+    <!-- Three.js və Köməkçi Kitabxanalar -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         * {
@@ -17,7 +17,7 @@
         }
 
         body {
-            background-color: #0b0c10;
+            background-color: #050508;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
@@ -29,26 +29,36 @@
             justify-content: space-between;
         }
 
+        /* HD Dashboard / HUD */
         .hud {
             position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
+            top: 20px;
+            left: 20px;
+            right: 20px;
             display: flex;
             justify-content: space-between;
             z-index: 10;
             pointer-events: none;
         }
 
-        .hud-box {
-            background: rgba(15, 20, 25, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 10px 18px;
-            border-radius: 12px;
-            backdrop-filter: blur(8px);
-            font-weight: bold;
-            font-size: 1.1rem;
+        .hud-panel {
+            background: rgba(10, 12, 18, 0.85);
+            border: 1px solid rgba(102, 252, 241, 0.3);
+            padding: 12px 20px;
+            border-radius: 14px;
+            backdrop-filter: blur(12px);
+            font-weight: 700;
+            font-size: 1.15rem;
             color: #66fcf1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hud-panel span {
+            color: #ffffff;
+            font-family: monospace;
         }
 
         #gameCanvas {
@@ -57,14 +67,15 @@
             display: block;
         }
 
+        /* Profesional İdarəetmə Paneli (GTA üslubunda Sükan və Pedallar) */
         .controls-container {
             position: absolute;
-            bottom: 20px;
+            bottom: 25px;
             left: 0;
             width: 100%;
             display: flex;
             justify-content: space-between;
-            padding: 0 25px;
+            padding: 0 30px;
             z-index: 10;
             pointer-events: none;
         }
@@ -72,74 +83,89 @@
         .control-group {
             pointer-events: auto;
             display: flex;
-            gap: 15px;
+            gap: 20px;
+            align-items: center;
         }
 
+        /* Realistik Sükan (Rul) */
         .steering-wheel {
-            width: 130px;
-            height: 130px;
-            border: 8px solid #c5c6c0;
+            width: 150px;
+            height: 150px;
+            border: 10px solid #c5c6c0;
             border-radius: 50%;
             position: relative;
-            background: rgba(31, 40, 51, 0.4);
-            backdrop-filter: blur(4px);
+            background: rgba(20, 25, 35, 0.5);
+            backdrop-filter: blur(6px);
             display: flex;
             align-items: center;
             justify-content: center;
             touch-action: none;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 15px rgba(255,255,255,0.2);
+            transition: transform 0.05s ease-out;
         }
 
         .steering-wheel::before {
             content: '';
             position: absolute;
-            width: 30px;
-            height: 30px;
+            width: 36px;
+            height: 36px;
             background: #45a29e;
             border-radius: 50%;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
         }
 
         .steering-wheel::after {
             content: '';
             position: absolute;
             width: 100%;
-            height: 6px;
+            height: 8px;
             background: #c5c6c0;
+            border-radius: 4px;
         }
 
+        /* Pedallar (Qaz və Əyləc) */
         .pedal {
-            width: 65px;
-            height: 110px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #45a29e, #1f2833);
-            border: 3px solid #66fcf1;
+            width: 75px;
+            height: 130px;
+            border-radius: 14px;
+            border: 3px solid rgba(255,255,255,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 0.95rem;
+            font-weight: 800;
+            font-size: 1rem;
             color: white;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             touch-action: none;
-            transition: transform 0.1s;
+            transition: transform 0.08s ease, background 0.08s ease;
         }
 
-        .pedal:active {
-            transform: scale(0.92);
-            background: #66fcf1;
-            color: #0b0c10;
+        .gas-pedal { 
+            background: linear-gradient(135deg, #2ecc71, #1e8449); 
+            border-color: #2ecc71; 
+        }
+        .gas-pedal:active { 
+            transform: scale(0.92) translateY(5px); 
+            background: #52be80; 
         }
 
-        .gas-pedal { background: linear-gradient(135deg, #2ecc71, #27ae60); border-color: #2ecc71; }
-        .brake-pedal { background: linear-gradient(135deg, #e74c3c, #c0392b); border-color: #e74c3c; }
+        .brake-pedal { 
+            background: linear-gradient(135deg, #e74c3c, #922b21); 
+            border-color: #e74c3c; 
+        }
+        .brake-pedal:active { 
+            transform: scale(0.92) translateY(5px); 
+            background: #ec7063; 
+        }
 
+        /* Qəza / Game Over Ekranı */
         #gameOver {
             display: none;
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 12, 16, 0.95);
+            background: rgba(5, 5, 8, 0.96);
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -148,27 +174,29 @@
             padding: 20px;
         }
 
-        #gameOver h1 { font-size: 2.5rem; color: #e74c3c; margin-bottom: 10px; }
-        #gameOver p { font-size: 1.2rem; color: #c5c6c0; margin-bottom: 25px; }
+        #gameOver h1 { font-size: 3rem; color: #e74c3c; margin-bottom: 10px; text-shadow: 0 0 20px rgba(231,76,60,0.5); }
+        #gameOver p { font-size: 1.25rem; color: #a0a5b8; margin-bottom: 30px; }
 
         .btn-restart {
             background: #66fcf1;
-            color: #0b0c10;
+            color: #050508;
             border: none;
-            padding: 12px 35px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 10px;
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(102, 252, 241, 0.4);
+            box-shadow: 0 10px 25px rgba(102, 252, 241, 0.4);
+            transition: transform 0.1s;
         }
+        .btn-restart:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 
     <div class="hud">
-        <div class="hud-box">🚗 Sürət: <span id="speedDisplay">0</span> km/s</div>
-        <div class="hud-box">🛣️ Məsafə: <span id="distanceDisplay">0</span> m</div>
+        <div class="hud-panel">🚗 Sürət: <span id="speedDisplay">0</span> km/s</div>
+        <div class="hud-panel">🏙️ Bakı Məsafəsi: <span id="distanceDisplay">0</span> m</div>
     </div>
 
     <canvas id="gameCanvas"></canvas>
@@ -184,112 +212,158 @@
     </div>
 
     <div id="gameOver">
-        <h1>Qəza! 💥</h1>
-        <p>Bakı küçələrində vuruşdunuz. Qət edilən məsafə: <span id="finalDistance">0</span> m</p>
-        <button class="btn-restart" onclick="restartGame()">Yenidən Başla</button>
+        <h1>BAKI QƏZASI! 💥</h1>
+        <p>Ağır zərbə nəticəsində avtomobil yararsız hala düşdü. Qət edilən məsafə: <span id="finalDistance">0</span> m</p>
+        <button class="btn-restart" onclick="restartGame()">YENİDƏN SÜR</button>
     </div>
 
     <script>
         const tg = window.Telegram?.WebApp;
         if (tg) tg.expand();
 
+        // 3D Three.js Mühiti (Pikselsiz Full HD Ayarlar)
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0b0c10);
-        scene.fog = new THREE.FogExp2(0x0b0c10, 0.015);
+        scene.background = new THREE.Color(0x050508);
+        scene.fog = new THREE.FogExp2(0x050508, 0.012);
 
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameCanvas'), antialias: true });
+        const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameCanvas'), antialias: true, powerPreference: "high-performance" });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        // Kinematik İşıqlandırma (Bakı Gecə Mühiti)
+        const ambientLight = new THREE.AmbientLight(0x1a233a, 1.2);
         scene.add(ambientLight);
 
-        const dirLight = new THREE.DirectionalLight(0x66fcf1, 0.8);
-        dirLight.position.set(10, 20, 10);
-        scene.add(dirLight);
+        const directionalLight = new THREE.DirectionalLight(0x66fcf1, 1.5);
+        directionalLight.position.set(20, 40, 20);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
 
-        const roadWidth = 14;
-        const roadGeometry = new THREE.PlaneGeometry(roadWidth, 1000);
-        const roadMaterial = new THREE.MeshStandardMaterial({ color: 0x1f2833, roughness: 0.8 });
-        const road = new THREE.Mesh(roadGeometry, roadMaterial);
+        // Yol (Bakı Prospekti - Asfalt və Neon kənarlar)
+        const roadWidth = 16;
+        const roadGeo = new THREE.PlaneGeometry(roadWidth, 1200);
+        const roadMat = new THREE.MeshStandardMaterial({ color: 0x111318, roughness: 0.6, metalness: 0.1 });
+        const road = new THREE.Mesh(roadGeo, roadMat);
         road.rotation.x = -Math.PI / 2;
-        road.position.z = -400;
+        road.position.z = -500;
+        road.receiveShadow = true;
         scene.add(road);
 
-        for (let i = 0; i > -1000; i -= 20) {
-            const lineGeo = new THREE.PlaneGeometry(0.4, 8);
-            const lineMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-            const line = new THREE.Mesh(lineGeo, lineMat);
-            line.rotation.x = -Math.PI / 2;
-            line.position.set(0, 0.02, i);
-            scene.add(line);
+        // Yolun ortasındakı ağ zolaqlar
+        for (let i = 0; i > -1200; i -= 25) {
+            const stripeGeo = new THREE.PlaneGeometry(0.3, 10);
+            const stripeMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            const stripe = new THREE.Mesh(stripeGeo, stripeMat);
+            stripe.rotation.x = -Math.PI / 2;
+            stripe.position.set(0, 0.03, i);
+            scene.add(stripe);
         }
 
+        // Kənar Bakı Binaları (Neon işıqlı göydələnlər - Flame Towers effekti)
+        for (let i = 0; i > -1200; i -= 50) {
+            const buildingGeo = new THREE.BoxGeometry(10, 60 + Math.random() * 40, 20);
+            const buildingMat = new THREE.MeshStandardMaterial({ 
+                color: i % 100 === 0 ? 0x1f2833 : 0x0b0c10, 
+                roughness: 0.3, 
+                emissive: i % 100 === 0 ? 0x0b3c5d : 0x000000 
+            });
+            
+            // Sol bina
+            const bLeft = new THREE.Mesh(buildingGeo, buildingMat);
+            bLeft.position.set(-roadWidth/2 - 12, buildingGeo.parameters.height/2, i);
+            scene.add(bLeft);
+
+            // Sağ bina
+            const bRight = new THREE.Mesh(buildingGeo, buildingMat);
+            bRight.position.set(roadWidth/2 + 12, buildingGeo.parameters.height/2, i);
+            scene.add(bRight);
+        }
+
+        // Lada 07 (VAZ 2107) Professional 3D Modeli və Asqı (Hidravlik) Sistemi
         const carGroup = new THREE.Group();
 
-        const bodyGeo = new THREE.BoxGeometry(2.2, 0.9, 4.4);
-        const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3, metalness: 0.2 });
-        const body = new THREE.Mesh(bodyGeo, bodyMat);
-        body.position.y = 0.8;
-        carGroup.add(body);
+        // Gövdə
+        const bodyGeo = new THREE.BoxGeometry(2.1, 0.85, 4.3);
+        const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2, metalness: 0.4 });
+        const carBody = new THREE.Mesh(bodyGeo, bodyMat);
+        carBody.position.y = 0.85;
+        carBody.castShadow = true;
+        carGroup.add(carBody);
 
-        const cabinGeo = new THREE.BoxGeometry(1.8, 0.8, 2.2);
-        const cabinMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.5 });
-        const cabin = new THREE.Mesh(cabinGeo, cabinMat);
-        cabin.position.set(0, 1.5, -0.2);
-        carGroup.add(cabin);
+        // Salon və şüşələr
+        const cabinGeo = new THREE.BoxGeometry(1.7, 0.75, 2.1);
+        const cabinMat = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.1 });
+        const carCabin = new THREE.Mesh(cabinGeo, cabinMat);
+        carCabin.position.set(0, 1.45, -0.15);
+        carGroup.add(carCabin);
 
-        const wheelGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.4, 16);
+        // Təkərlər (Hər biri ayrıca asqı üçün qruplaşdırılıb)
+        const wheelGeo = new THREE.CylinderGeometry(0.38, 0.38, 0.38, 24);
         wheelGeo.rotateZ(Math.PI / 2);
-        const wheelMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
+        const wheelMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.8 });
 
-        const wheelPositions = [
-            [-1.2, 0.4, 1.4], [1.2, 0.4, 1.4],
-            [-1.2, 0.4, -1.4], [1.2, 0.4, -1.4]
+        const wheels = [];
+        const wheelCoords = [
+            [-1.15, 0.38, 1.35], [1.15, 0.38, 1.35],
+            [-1.15, 0.38, -1.35], [1.15, 0.38, -1.35]
         ];
 
-        wheelPositions.forEach(pos => {
+        wheelCoords.forEach(pos => {
             const wheel = new THREE.Mesh(wheelGeo, wheelMat);
             wheel.position.set(...pos);
+            wheel.castShadow = true;
             carGroup.add(wheel);
+            wheels.push(wheel);
         });
 
         scene.add(carGroup);
         carGroup.position.set(0, 0, 0);
 
-        camera.position.set(0, 4, 7);
-        camera.lookAt(carGroup.position);
+        // Kamera (GTA 5 Dinamik Təqib Kamerası)
+        camera.position.set(0, 4.5, 7.5);
 
+        // Trafik Maneələri (Bakı Küçələrindəki Digər Avtomobiller)
         let obstacles = [];
         function spawnObstacle() {
-            const obsGeo = new THREE.BoxGeometry(2.1, 1.1, 4.2);
-            const colors = [0xe74c3c, 0xf1c40f, 0x3498db, 0x9b59b6];
-            const obsMat = new THREE.MeshStandardMaterial({ color: colors[Math.floor(Math.random() * colors.length)] });
+            const obsGeo = new THREE.BoxGeometry(2.0, 1.1, 4.1);
+            const colors = [0xc0392b, 0x2980b9, 0xd35400, 0x7f8c8d, 0x27ae60];
+            const obsMat = new THREE.MeshStandardMaterial({ color: colors[Math.floor(Math.random() * colors.length)], roughness: 0.3 });
             const obstacle = new THREE.Mesh(obsGeo, obsMat);
-            
-            const lanes = [-4.5, 0, 4.5];
+            obstacle.castShadow = true;
+
+            const lanes = [-5, 0, 5];
             const randomLane = lanes[Math.floor(Math.random() * lanes.length)];
             
-            obstacle.position.set(randomLane, 0.8, -300);
+            obstacle.position.set(randomLane, 0.8, -400);
             scene.add(obstacle);
             obstacles.push(obstacle);
         }
 
+        // Fizika Dəyişənləri (GTA 5 üslubunda çəki, sürətlənmə və dönmə)
         let carX = 0;
         let speed = 0;
-        let maxSpeed = 1.2;
+        let maxSpeed = 1.6;
+        let acceleration = 0.012;
+        let friction = 0.008;
+        let steering = 0;
+        let targetSteering = 0;
+        let carTilt = 0;
+        let suspensionBounce = 0;
         let distance = 0;
         let isGasPressed = false;
         let isBrakePressed = false;
-        let steeringAngle = 0;
         let isGameOver = false;
 
+        // İdarəetmə Dinamikaları
         document.getElementById('gasBtn').addEventListener('pointerdown', () => { isGasPressed = true; });
         document.getElementById('gasBtn').addEventListener('pointerup', () => { isGasPressed = false; });
         document.getElementById('brakeBtn').addEventListener('pointerdown', () => { isBrakePressed = true; });
         document.getElementById('brakeBtn').addEventListener('pointerup', () => { isBrakePressed = false; });
 
+        // Sükan idarəetməsi (Hassas Touch / Mouse hərəkəti)
         const steeringWheel = document.getElementById('steeringWheel');
         let isSteering = false;
         let startX = 0;
@@ -302,12 +376,14 @@
         window.addEventListener('pointermove', (e) => {
             if (!isSteering) return;
             let diff = e.clientX - startX;
-            steeringAngle = Math.max(-1, Math.min(1, diff / 60));
+            targetSteering = Math.max(-1, Math.min(1, diff / 70));
+            steeringWheel.style.transform = `rotate(${targetSteering * 75}deg)`;
         });
 
         window.addEventListener('pointerup', () => {
             isSteering = false;
-            steeringAngle = 0;
+            targetSteering = 0;
+            steeringWheel.style.transform = `rotate(0deg)`;
         });
 
         window.restartGame = function() {
@@ -323,55 +399,73 @@
 
         let spawnTimer = 0;
 
+        // Əsas Oyun Döngüsü (GTA Fizika Mühərriki)
         function loop() {
             if (isGameOver) return;
 
+            // Qaz və Əyləc Reaksiyası
             if (isGasPressed) {
-                speed = Math.min(maxSpeed, speed + 0.015);
+                speed = Math.min(maxSpeed, speed + acceleration);
             } else {
-                speed = Math.max(0, speed - 0.01);
+                speed = Math.max(0, speed - friction);
             }
 
             if (isBrakePressed) {
-                speed = Math.max(0, speed - 0.03);
+                speed = Math.max(0, speed - 0.035);
             }
 
-            carX += steeringAngle * 0.12;
+            // Sükan hidravlikası və yumşaq dönmə (Smooth Interpolation)
+            steering += (targetSteering - steering) * 0.15;
+
+            // Maşının sola-sağa hərəkəti və sürətə uyğun olaraq dönmə çətinliyi
+            carX += steering * (speed * 0.9);
             carX = Math.max(-roadWidth / 2 + 1.5, Math.min(roadWidth / 2 - 1.5, carX));
             carGroup.position.x = carX;
 
+            // GTA Fizika: Kəskin dönəndə maşının sağa-sola əyilməsi (Roll/Tilt) və təkərin havaya qalxma effekti
+            carTilt = -steering * speed * 0.7;
+            suspensionBounce = Math.sin(Date.now() * 0.015) * (speed * 0.04);
+            
+            carGroup.rotation.z = carTilt;
+            carGroup.rotation.y = -steering * 0.35;
+            carGroup.position.y = Math.abs(steering) * 0.15 + suspensionBounce; // Kəskin manevrdə ağırlıq transferi
+
             if (speed > 0) {
-                distance += Math.round(speed * 10);
+                distance += Math.round(speed * 12);
             }
 
+            // Trafik Maneələri
             spawnTimer++;
-            if (spawnTimer > 90 - speed * 40) {
+            if (spawnTimer > 80 - speed * 30) {
                 spawnObstacle();
                 spawnTimer = 0;
             }
 
             for (let i = obstacles.length - 1; i >= 0; i--) {
-                obstacles[i].position.z += speed * 2;
+                obstacles[i].position.z += speed * 2.2;
 
+                // Real Toqquşma (Collision Box)
                 if (
-                    Math.abs(carGroup.position.x - obstacles[i].position.x) < 1.8 &&
-                    Math.abs(carGroup.position.z - obstacles[i].position.z) < 3.5
+                    Math.abs(carGroup.position.x - obstacles[i].position.x) < 1.7 &&
+                    Math.abs(carGroup.position.z - obstacles[i].position.z) < 3.4
                 ) {
                     isGameOver = true;
                     document.getElementById('finalDistance').textContent = distance;
                     document.getElementById('gameOver').style.display = 'flex';
                 }
 
-                if (obstacles[i].position.z > 10) {
+                if (obstacles[i].position.z > 12) {
                     scene.remove(obstacles[i]);
                     obstacles.splice(i, 1);
                 }
             }
 
-            camera.position.x = carX * 0.4;
-            camera.lookAt(carGroup.position.x, carGroup.position.y + 1, carGroup.position.z - 2);
+            // Kameranın maşını dinamik izləməsi (Lagged Camera Follow)
+            camera.position.x += (carX * 0.5 - camera.position.x) * 0.1;
+            camera.lookAt(carGroup.position.x * 0.3, carGroup.position.y + 1, carGroup.position.z - 3);
 
-            document.getElementById('speedDisplay').textContent = Math.round(speed * 120);
+            // UI Yenilənməsi
+            document.getElementById('speedDisplay').textContent = Math.round(speed * 130);
             document.getElementById('distanceDisplay').textContent = distance;
 
             renderer.render(scene, camera);
