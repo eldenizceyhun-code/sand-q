@@ -29,7 +29,6 @@
             justify-content: space-between;
         }
 
-        /* Dashboard (Statistika) */
         .hud {
             position: absolute;
             top: 15px;
@@ -58,7 +57,6 @@
             display: block;
         }
 
-        /* İdarəetmə Paneli (Rul və Pedallar) */
         .controls-container {
             position: absolute;
             bottom: 20px;
@@ -77,7 +75,6 @@
             gap: 15px;
         }
 
-        /* Sükan (Rul) */
         .steering-wheel {
             width: 130px;
             height: 130px;
@@ -111,7 +108,6 @@
             background: #c5c6c0;
         }
 
-        /* Pedallar */
         .pedal {
             width: 65px;
             height: 110px;
@@ -139,7 +135,6 @@
         .gas-pedal { background: linear-gradient(135deg, #2ecc71, #27ae60); border-color: #2ecc71; }
         .brake-pedal { background: linear-gradient(135deg, #e74c3c, #c0392b); border-color: #e74c3c; }
 
-        /* Oyun Bitdi Ekranı */
         #gameOver {
             display: none;
             position: absolute;
@@ -178,21 +173,16 @@
 
     <canvas id="gameCanvas"></canvas>
 
-    <!-- İdarəetmə Paneli (Rul və Pedallar) -->
     <div class="controls-container">
-        <!-- Rul (Sükan) -->
         <div class="control-group">
             <div class="steering-wheel" id="steeringWheel"></div>
         </div>
-
-        <!-- Pedallar -->
         <div class="control-group">
             <div class="pedal brake-pedal" id="brakeBtn">ƏYLƏC</div>
             <div class="pedal gas-pedal" id="gasBtn">QAZ</div>
         </div>
     </div>
 
-    <!-- Oyun Bitdi -->
     <div id="gameOver">
         <h1>Qəza! 💥</h1>
         <p>Bakı küçələrində vuruşdunuz. Qət edilən məsafə: <span id="finalDistance">0</span> m</p>
@@ -203,7 +193,6 @@
         const tg = window.Telegram?.WebApp;
         if (tg) tg.expand();
 
-        // 3D Three.js Mühiti
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x0b0c10);
         scene.fog = new THREE.FogExp2(0x0b0c10, 0.015);
@@ -213,7 +202,6 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
 
-        // İşıqlandırma (Bakı gecələri / Küçə lampaları effekti)
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
         scene.add(ambientLight);
 
@@ -221,7 +209,6 @@
         dirLight.position.set(10, 20, 10);
         scene.add(dirLight);
 
-        // Yol (Bakı asfaltı)
         const roadWidth = 14;
         const roadGeometry = new THREE.PlaneGeometry(roadWidth, 1000);
         const roadMaterial = new THREE.MeshStandardMaterial({ color: 0x1f2833, roughness: 0.8 });
@@ -230,7 +217,6 @@
         road.position.z = -400;
         scene.add(road);
 
-        // Yol xətləri (Orta zolaq)
         for (let i = 0; i > -1000; i -= 20) {
             const lineGeo = new THREE.PlaneGeometry(0.4, 8);
             const lineMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
@@ -240,24 +226,20 @@
             scene.add(line);
         }
 
-        // Lada 07 (VAZ 2107) 3D Modelinin Qurulması (Sadələşdirilmiş Bloklardan Professional Görünüş)
         const carGroup = new THREE.Group();
 
-        // Maşının Gövdəsi (Klassik kiglər - Ağ rəngdə Lada)
         const bodyGeo = new THREE.BoxGeometry(2.2, 0.9, 4.4);
         const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3, metalness: 0.2 });
         const body = new THREE.Mesh(bodyGeo, bodyMat);
         body.position.y = 0.8;
         carGroup.add(body);
 
-        // Salon (Kabina)
         const cabinGeo = new THREE.BoxGeometry(1.8, 0.8, 2.2);
         const cabinMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.5 });
         const cabin = new THREE.Mesh(cabinGeo, cabinMat);
         cabin.position.set(0, 1.5, -0.2);
         carGroup.add(cabin);
 
-        // Təkərlər
         const wheelGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.4, 16);
         wheelGeo.rotateZ(Math.PI / 2);
         const wheelMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
@@ -267,22 +249,18 @@
             [-1.2, 0.4, -1.4], [1.2, 0.4, -1.4]
         ];
 
-        const wheels = [];
         wheelPositions.forEach(pos => {
             const wheel = new THREE.Mesh(wheelGeo, wheelMat);
             wheel.position.set(...pos);
             carGroup.add(wheel);
-            wheels.push(wheel);
         });
 
         scene.add(carGroup);
         carGroup.position.set(0, 0, 0);
 
-        // Kamera Sürücü Görünüşü (Arxadan təqib)
         camera.position.set(0, 4, 7);
         camera.lookAt(carGroup.position);
 
-        // Maneələr (Bakı yolundakı digər maşınlar)
         let obstacles = [];
         function spawnObstacle() {
             const obsGeo = new THREE.BoxGeometry(2.1, 1.1, 4.2);
@@ -298,7 +276,6 @@
             obstacles.push(obstacle);
         }
 
-        // Oyun Dəyişənləri
         let carX = 0;
         let speed = 0;
         let maxSpeed = 1.2;
@@ -308,13 +285,11 @@
         let steeringAngle = 0;
         let isGameOver = false;
 
-        // İdarəetmə Dinamikaları (Pedal və Rul)
         document.getElementById('gasBtn').addEventListener('pointerdown', () => { isGasPressed = true; });
         document.getElementById('gasBtn').addEventListener('pointerup', () => { isGasPressed = false; });
         document.getElementById('brakeBtn').addEventListener('pointerdown', () => { isBrakePressed = true; });
         document.getElementById('brakeBtn').addEventListener('pointerup', () => { isBrakePressed = false; });
 
-        // Rulun dönməsi (Touch / Mouse)
         const steeringWheel = document.getElementById('steeringWheel');
         let isSteering = false;
         let startX = 0;
@@ -348,11 +323,9 @@
 
         let spawnTimer = 0;
 
-        // Oyun Döngüsü
         function loop() {
             if (isGameOver) return;
 
-            // Sürətlənmə və əyləc
             if (isGasPressed) {
                 speed = Math.min(maxSpeed, speed + 0.015);
             } else {
@@ -363,17 +336,14 @@
                 speed = Math.max(0, speed - 0.03);
             }
 
-            // Maşının sola-sağa hərəkəti (Rul ilə)
             carX += steeringAngle * 0.12;
             carX = Math.max(-roadWidth / 2 + 1.5, Math.min(roadWidth / 2 - 1.5, carX));
             carGroup.position.x = carX;
 
-            // Məsafə artımı
             if (speed > 0) {
                 distance += Math.round(speed * 10);
             }
 
-            // Maneələrin hərəkəti
             spawnTimer++;
             if (spawnTimer > 90 - speed * 40) {
                 spawnObstacle();
@@ -383,7 +353,6 @@
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 obstacles[i].position.z += speed * 2;
 
-                // Toqquşma (Qəza) yoxlanışı
                 if (
                     Math.abs(carGroup.position.x - obstacles[i].position.x) < 1.8 &&
                     Math.abs(carGroup.position.z - obstacles[i].position.z) < 3.5
@@ -393,18 +362,15 @@
                     document.getElementById('gameOver').style.display = 'flex';
                 }
 
-                // Arxada qalan maneəni sil
                 if (obstacles[i].position.z > 10) {
                     scene.remove(obstacles[i]);
                     obstacles.splice(i, 1);
                 }
             }
 
-            // Kamera tənzimlənməsi
             camera.position.x = carX * 0.4;
             camera.lookAt(carGroup.position.x, carGroup.position.y + 1, carGroup.position.z - 2);
 
-            // UI Yenilənməsi
             document.getElementById('speedDisplay').textContent = Math.round(speed * 120);
             document.getElementById('distanceDisplay').textContent = distance;
 
@@ -412,39 +378,12 @@
             if (!isGameOver) requestAnimationFrame(loop);
         }
 
-        // Ekran ölçüsü dəyişdikdə
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        loop();
-    </script>
-</body>
-</html>
-idth / 2, player.y + 50);
-
-            // 2. Xiyarları çəkirik
-            for (let item of items) {
-                ctx.font = "35px Arial";
-                if (item.isBad) {
-                    ctx.fillText("🌵", item.x + item.size / 2, item.y + item.size / 2); // Tikanlı (zərərli)
-                } else {
-                    ctx.fillText("🥒", item.x + item.size / 2, item.y + item.size / 2); // Dadlı xiyar
-                }
-            }
-        }
-
-        function loop() {
-            update();
-            draw();
-            if (!isGameOver) {
-                requestAnimationFrame(loop);
-            }
-        }
-
-        // Oyunu başladırıq
         loop();
     </script>
 </body>
